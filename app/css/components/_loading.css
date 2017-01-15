@@ -1,0 +1,30 @@
+@import '../main.css';
+
+.loading {
+  float: left;
+  padding-left: 5px;
+  line-height: 1rem;
+  font-size: 1rem;
+  .message {
+    display: block;
+    float: right;
+    padding: 0px 5px 0px 5px;
+    color: $light-grey;
+  }
+  &.size-1x {
+  	line-height: 1rem;
+    font-size: 1rem;
+  }
+  &.size-2x {
+    line-height: 1.4rem;
+    font-size: 1.4rem;
+  }
+  &.size-3x {
+    line-height: 1.8rem;
+    font-size: 1.8rem;
+  }
+  &.size-4x {
+    line-height: 2.2rem;
+    font-size: 2.2rem;
+  }
+}

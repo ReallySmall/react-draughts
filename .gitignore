@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+.env
+.tmp
+.idea
+server/config/secrets.js
+compiled/

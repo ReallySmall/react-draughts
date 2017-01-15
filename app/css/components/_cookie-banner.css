@@ -1,0 +1,48 @@
+@import '../main.css';
+
+.header-message {
+  &.cookie {
+    background: $black;
+    .container {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    p {
+      span {
+        padding-right: 30px;
+      }
+      float: left;
+      color: $white;
+      a {
+        &:hover, &:focus {
+          color: $orange;
+          text-decoration: underline;
+        }
+      }
+    }
+    button {
+      border: none;
+      padding: 0px 6px;
+      line-height: 22px;
+      border-radius: 4px;
+      &:hover, &:focus {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+
+  .header-message {
+    &.cookie {
+      .container {
+        p {
+          padding: 0;
+        }
+      }
+    }
+  }
+
+}

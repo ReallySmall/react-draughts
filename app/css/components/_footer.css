@@ -1,0 +1,53 @@
+@import '../main.css';
+
+.footer {
+  width: 100%;
+  text-align: left;
+  background: #292929;
+  font-size: 12px;
+  color: $white;
+  padding: 30px 0;
+  padding: 30px 0px;
+  margin: 0px;
+  border-top: 2px solid $black !important;
+  .link-block-container {
+    width: 100%;
+    margin: 0 0 20px 0;
+    border-left: 1px solid $grey2;
+    border-right: 1px solid $grey2;
+    .link-block {
+      margin-bottom: 10px;
+      h3, h4 {
+        color: $light-grey;
+        span {
+          margin: 0 10px 0 0;
+          color: $orange;
+        }
+      }
+      ul {
+        li {
+          a {
+            color: $lighter-grey;
+            text-decoration: none;
+            &:hover, &:focus, &:active {
+              color: $lightest-grey;
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+
+  .footer {
+    text-align: center;
+    margin: 60px 0px 0px 0px;
+    .link-block-container {
+      margin: 0;
+    }
+  }
+
+}

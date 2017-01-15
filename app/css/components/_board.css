@@ -1,0 +1,7 @@
+@import '../main.css';
+
+.board {
+	overflow: hidden;
+  	border: 2px solid orange;
+  	margin: 0px 0px 25px 0px;
+}

@@ -1,0 +1,42 @@
+/*
+ * Typography
+ * ========================================================================== */
+
+$font-family-base: 'Open Sans', Arial, sans-serif;
+
+/*
+ * Layout
+ * ========================================================================== */
+
+$max-content-width:     1000px;
+
+/*
+ * Media queries breakpoints
+ * ========================================================================== */
+
+$screen-xs-min:         480px;  /* Extra small screen / phone */
+$screen-sm-min:         768px;  /* Small screen / tablet */
+$screen-md-min:         992px;  /* Medium screen / desktop */
+$screen-lg-min:         1200px; /* Large screen / wide desktop */
+
+/*
+ * Animations
+ * ========================================================================== */
+
+$animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;
+
+$white: #fff;
+$black: #000;
+$cream: #ECDF8D;
+$blue: #4F7290;
+$light-blue: #337ab7;
+$grey: #3B3A35;
+$grey2: #4a4a4a;
+$light-grey: #7C7C7C;
+$lighter-grey: #D4D3D3;
+$lightest-grey: #e8e8e8;
+$orange: #FB6648;
+$green: rgb(55, 165, 55);
+$red: rgb(203, 88, 92);
+$purple: #5E3448;
+$text-colour: #606060;

@@ -1,0 +1,35 @@
+@import '../main.css';
+
+.piece {
+	display: block;
+	position: absolute;
+	width: 80%;
+	top: 10%;
+	right: 10%;
+	bottom: 10%;
+	left: 10%;
+	border-radius: 50%;
+	background-color: brown;
+	&.red {
+		background-color: red;
+	}
+	&.green {
+		background-color: green;
+	}
+	&.moveable {
+		&:hover {
+			cursor: pointer;
+		}
+	}
+	&.available {
+		background: none;
+		&.highlighted {
+			border: 2px dashed $white;
+			opacity: 0.5;
+			&:hover, &:focus {
+				opacity: 1;
+				cursor: pointer;
+			}
+		}
+	}
+}

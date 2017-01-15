@@ -1,0 +1,14 @@
+@import '../main.css';
+
+.outdated-browser {
+  display: none;
+  background: #ec8a10;
+  color: $black;
+  padding: 5px 0;
+}
+
+.ua-ie-6, .ua-ie-7, .ua-ie-8, .ua-ie-9 {
+  .outdated-browser {
+    display: block;
+  }
+}

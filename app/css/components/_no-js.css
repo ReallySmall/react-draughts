@@ -1,0 +1,8 @@
+@import '../main.css';
+
+.header-message.no-js {
+  noscript {
+    background: $red;
+    color: $white;
+  }
+}

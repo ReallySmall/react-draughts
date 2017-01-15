@@ -1,0 +1,36 @@
+@import '../main.css';
+
+.intro-block {
+	margin: 0px 0px 10px 0px;
+  	background: whitesmoke;
+  	float: none;
+  	p {
+  		color: grey;
+  	}
+}
+
+.page {
+	.container {
+		padding: 35px 0;
+		overflow: hidden;
+	}
+}
+
+.page-heading {
+  margin: 0px 0px 10px 0px;
+  line-height: 24px;
+  font-size: 20px;
+}
+
+@media (min-width: 768px) {
+
+	.intro-block {
+		margin: 0px 0px 20px 0px;
+	}
+
+	.page-heading {
+		line-height: 28px;
+	  	font-size: 24px;
+	}
+
+}

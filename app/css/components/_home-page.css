@@ -1,0 +1,77 @@
+@import '../main.css';
+
+.container-wrapper {
+  padding: 0 !important;
+  background: none;
+  overflow: hidden;
+}
+
+.content-block {
+    position: relative;
+    padding: 40px 0px;
+    background: whitesmoke;
+    h2, h3, h4, h5, h6 {
+      line-height: 24px;
+      font-size: 20px;
+    }
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      z-index: 5;
+      top: 100%;
+      left: 50%;
+      margin-left: -40px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 20px 40px 0 40px;
+      border-color: whitesmoke transparent transparent transparent;
+    }
+    &.light-grey {
+      background: $light-grey;
+      .container {
+        background: $light-grey;
+      }
+      &:after {
+        content: '';
+        border-color: $light-grey transparent transparent transparent;
+      }
+    }
+    &.lightest-grey {
+      background: $lightest-grey;
+      .container {
+        background: $lightest-grey;
+      }
+      &:after {
+        content: '';
+        border-color: $lightest-grey transparent transparent transparent;
+      }
+    }
+    &.white {
+      background: $white;
+      .container {
+        background: $white;
+      }
+      &:after {
+        content: '';
+        border-color: $white transparent transparent transparent;
+      }
+    }
+    &.last {
+      &:after {
+        display: none;
+      }
+    }
+  }
+
+@media (min-width: 768px) {
+
+  .content-block {
+    h2, h3, h4, h5, h6 {
+      line-height: 28px;
+      font-size: 24px;
+    }
+  }
+
+}
