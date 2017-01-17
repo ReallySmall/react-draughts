@@ -65,7 +65,8 @@ BoardContainer.propTypes = {
 function mapStateToProps(state, props) {
 
   return {
-    game: state.game
+    game: state.game,
+    pieces: state.pieces
   };
   
 }

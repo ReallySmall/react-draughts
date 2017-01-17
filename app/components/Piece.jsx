@@ -14,12 +14,24 @@ export default class Piece extends Component {
   	const accessibleInfo = <span className={cx('visually-hidden')}>Player {player} {type}</span>;
   	const isActive = player === activePlayer ? true: false;
 
+    let markup = null;
+
+    if(player){
+      if(type === 'available'){
+        markup = <button className={cx('piece','available', 'plain')}></button>;
+      } else {
+        if(isActive){
+          markup = <button className={cx('piece', 'moveable', colour, type)}>{accessibleInfo}</button>;
+        } else {
+          markup = <p className={cx('piece', 'plain', colour, type)}>{accessibleInfo}</p>;
+        }
+      }
+    }
+
     return (
-    	<div>
-	  		{player && isActive && <button className={cx('piece', 'moveable', colour)}>{accessibleInfo}</button>}
-	  		{player && !isActive && <p className={cx('piece', 'plain', colour)}>{accessibleInfo}</p>}
-        {!player && <button className={cx('piece','available', 'plain')}></button>}
-  		</div>
+      <div>
+      {markup}
+      </div>
     );
   }
 

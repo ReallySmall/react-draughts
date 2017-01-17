@@ -6,10 +6,15 @@ import * as types from 'constants/index';
 
 polyfill();
 
-// Fetch wrapper logic
 export function changeGridSize() {
   return {
     type: types.CHANGE_GRID_SIZE,
     gridSize: 8
+  }
+}
+
+export function startGame() {
+  return {
+    type: types.START_GAME
   }
 }

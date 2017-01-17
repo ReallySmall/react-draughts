@@ -9,14 +9,13 @@ export default class Square extends Component {
 
   render(){
 
-  	const { row, col, cellRef, player, type } = this.props;
-  	const modifier = row % 2 === 0 ? 0 : 1; 
-  	let conditionalStyles = (col + modifier) % 2 === 0 ? 'alt ' : '';
-  	
+    const { row, col, cellRef, player, type, inGame } = this.props;
+    const conditionalStyles = inGame === true ? 'alt ' : '';
+    
     return ( 
-		<div className={cx('square', conditionalStyles)}>
-			{this.props.children}
-		</div>
+    <div className={cx('square', conditionalStyles)}>
+      {this.props.children}
+    </div>
     );
   }
 

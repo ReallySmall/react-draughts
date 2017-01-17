@@ -13,3 +13,4 @@ export const SET_ACTIVE_PLAYER = 'SET_ACTIVE_PLAYER';
 export const START_GAME = 'START_GAME';
 export const END_GAME = 'END_GAME';
 export const UPDATE_GAME_HISTORY = 'SET_PIECE_SELECTION';
+export const UPDATE_PIECES = 'UPDATE_PIECES';

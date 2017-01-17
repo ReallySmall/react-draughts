@@ -10,12 +10,12 @@ export default class SideBar extends Component {
 
   render(){
 
-  	const { activePlayer, started, lastMove } = this.props;
+  	const { activePlayer, started, lastMove, changeGridSize, startGame } = this.props;
 
     return (
 		<div className={cx('col-md-3')}>
-			{!started && <GameSettings />}
-			{started && <CurrentGame />}
+			{!started && <GameSettings changeGridSize={changeGridSize} startGame={startGame} />}
+			{started && <CurrentGame activePlayer={activePlayer} lastMove={lastMove} />}
         </div>
     );
   }

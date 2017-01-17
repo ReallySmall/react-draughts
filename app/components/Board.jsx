@@ -29,18 +29,24 @@ export default class Board extends Component {
 
         const colId = j;
         const cellRef = { row: i, col: j}; // ref to this cell in the grid
+        const modifier = rowId % 2 === 0 ? 0 : 1;
+        const inGame = (colId + modifier) % 2 === 0 ? true : false;
 
-        let piece = find(pieces, function(piece) { // fetch any piece with a mtaching cell ref
-          return piece.cellRef.row === rowId && piece.cellRef.col == colId; 
-        }) || null;
+        let piece = null;
 
-        if(piece){
-          piece.activePlayer = activePlayer;
-        } else {
-          let piece = { cellRef: { row: i, col: j}, player: 0, type: 'empty', selected: false }
+        if(inGame){
+
+          piece = find(pieces, function(piece) { // fetch any piece with a mtaching cell ref
+            return piece.cellRef.row === rowId && piece.cellRef.col == colId; 
+          }) || null;
+
+          if(piece){
+            piece.activePlayer = activePlayer;
+          }
+
         }
 
-        row.push(<Square key={j} {...cellRef}><Piece {...piece} /></Square>); // add square to row
+        row.push(<Square key={j} inGame={inGame} {...cellRef}><Piece {...piece} /></Square>); // add square to row
 
       }
 

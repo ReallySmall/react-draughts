@@ -4,9 +4,9 @@ import { fetchWrapper } from 'actions/wrapper';
 import Page from 'components/Page';
 import Homepage from 'components/Homepage';
 import BoardContainer from 'containers/BoardContainer';
-import SideBar from 'components/SideBar';
+import SideBarContainer from 'containers/SideBarContainer';
 
-export default class HomepageContainer extends Component {
+class HomepageContainer extends Component {
 
     //Data that needs to be called before rendering the component
     //This is used for server side rending via the fetchComponentDataBeforeRending() method
@@ -22,15 +22,24 @@ export default class HomepageContainer extends Component {
 
     render() {
 
-      const { isFetching, requestFailed, content } = this.props;
+      const { isFetching, requestFailed, game, content } = this.props;
 
       return (
         <Page isFetching={isFetching} requestFailed={requestFailed} internalMarkup="false">
-          <Homepage content={content}>
-            <BoardContainer />
-          </Homepage>
+          <BoardContainer />
+          <SideBarContainer />
         </Page>
       );
 
     }
 };
+
+function mapStateToProps(state, props) {
+
+  return {
+    game: state.game,
+  };
+  
+}
+
+export default connect(mapStateToProps)(HomepageContainer);

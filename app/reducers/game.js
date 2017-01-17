@@ -12,6 +12,11 @@ export default function game(state = {
   lastMove: null
 }, action) {
   switch (action.type) {
+    case START_GAME:
+      return Object.assign({}, state, {
+        started: true,
+        activePlayer: 1
+      });
     default:
       return state;
   }
