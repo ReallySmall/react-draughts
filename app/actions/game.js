@@ -6,10 +6,11 @@ import * as types from 'constants/index';
 
 polyfill();
 
-export function changeGridSize() {
+export function setGameType(type) {
   return {
-    type: types.CHANGE_GRID_SIZE,
-    gridSize: 8
+    type: types.CHANGE_GAME_TYPE,
+    gridSize: type.gridSize,
+    startingPieceCount: type.pieces
   }
 }
 

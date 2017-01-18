@@ -18,6 +18,7 @@ export default class Board extends Component {
   render() {
 
     const { pieces, gridSize, activePlayer, started } = this.props;
+
     let grid = []; // grid to populate with squares
 
     for(let i = 0; i < gridSize; i++){
@@ -46,7 +47,7 @@ export default class Board extends Component {
 
         }
 
-        row.push(<Square key={j} inGame={inGame} {...cellRef}><Piece {...piece} /></Square>); // add square to row
+        row.push(<Square key={j} gridSize={gridSize} inGame={inGame} {...cellRef}><Piece {...piece} /></Square>); // add square to row
 
       }
 

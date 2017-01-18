@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { isClient } from 'utilities/environment';
 import { fetchWrapper } from 'actions/wrapper';
 import { changeGridSize } from 'actions/game';
+import { createPieces } from 'utilities/layout';
 import Board from 'components/Board';
 
 class BoardContainer extends Component {
@@ -23,33 +24,7 @@ class BoardContainer extends Component {
   	render() {
 
       const { game } = this.props;
-
-      const pieces = [
-        { cellRef: { row: 0, col: 0}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 0, col: 2}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 0, col: 4}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 0, col: 6}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 1, col: 1}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 1, col: 3}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 1, col: 5}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 1, col: 7}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 2, col: 0}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 2, col: 2}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 2, col: 4}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 2, col: 6}, player: 1, type: 'pawn', selected: false },
-        { cellRef: { row: 5, col: 1}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 5, col: 3}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 5, col: 5}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 5, col: 7}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 6, col: 0}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 6, col: 2}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 6, col: 4}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 6, col: 6}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 7, col: 1}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 7, col: 3}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 7, col: 5}, player: 2, type: 'pawn', selected: false },
-        { cellRef: { row: 7, col: 7}, player: 2, type: 'pawn', selected: false }
-      ];
+      const pieces = createPieces(game.gridSize, game.startingPieceCount);
 
 	  	return (
         <Board pieces={pieces} {...game} />
