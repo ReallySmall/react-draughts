@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import Piece from 'components/piece';
 import classNames from 'classnames/bind';
 import styles from 'css/components/_square';
 

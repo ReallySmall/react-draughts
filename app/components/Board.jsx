@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
-import {map, contains, find} from "underscore";
-import Square from 'components/square';
-import Piece from 'components/piece';
+import Square from 'components/Square';
+import PieceContainer from 'containers/PieceContainer';
 import classNames from 'classnames/bind';
 import styles from 'css/components/_board';
 
@@ -17,7 +16,7 @@ export default class Board extends Component {
 
   render() {
 
-    const { pieces, gridSize, activePlayer, started } = this.props;
+    const { pieces, gridSize } = this.props;
 
     let grid = []; // grid to populate with squares
 
@@ -33,21 +32,7 @@ export default class Board extends Component {
         const modifier = rowId % 2 === 0 ? 0 : 1;
         const inGame = (colId + modifier) % 2 === 0 ? true : false;
 
-        let piece = null;
-
-        if(inGame){
-
-          piece = find(pieces, function(piece) { // fetch any piece with a mtaching cell ref
-            return piece.cellRef.row === rowId && piece.cellRef.col == colId; 
-          }) || null;
-
-          if(piece){
-            piece.activePlayer = activePlayer;
-          }
-
-        }
-
-        row.push(<Square key={j} gridSize={gridSize} inGame={inGame} {...cellRef}><Piece {...piece} /></Square>); // add square to row
+        row.push(<Square key={j} gridSize={gridSize} inGame={inGame}><PieceContainer pieces={pieces} {...cellRef} /></Square>); // add square to row
 
       }
 
