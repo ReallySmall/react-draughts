@@ -32,7 +32,7 @@ export default class Board extends Component {
         const modifier = rowId % 2 === 0 ? 0 : 1;
         const inGame = (colId + modifier) % 2 === 0 ? true : false;
 
-        row.push(<Square key={j} gridSize={gridSize} inGame={inGame}><PieceContainer pieces={pieces} {...cellRef} /></Square>); // add square to row
+        row.push(<Square key={j} gridSize={gridSize} inGame={inGame}><PieceContainer pieces={pieces} {...cellRef} gridSize={gridSize} /></Square>); // add square to row
 
       }
 

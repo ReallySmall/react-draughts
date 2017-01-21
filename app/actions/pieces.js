@@ -2,7 +2,7 @@
 import { polyfill } from 'es6-promise';
 import md5 from 'spark-md5';
 import * as types from 'constants/index';
-import { availableMoves, unselectAllPieces, selectPiece } from 'logic/updatepieces';
+import { availableMoves, unselectAllPieces, selectPiece } from 'game/updatepieces';
 
 polyfill();
 

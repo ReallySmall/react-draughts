@@ -4,7 +4,7 @@ import { clearPieceSelections, setPieceSelection } from 'actions/pieces';
 import { isClient } from 'helpers/environment';
 import { fetchWrapper } from 'actions/wrapper';
 import { changeGridSize } from 'actions/game';
-import { createPieces } from 'logic/setuppieces';
+import { createPieces } from 'game/setuppieces';
 import Board from 'components/Board';
 
 class BoardContainer extends Component {

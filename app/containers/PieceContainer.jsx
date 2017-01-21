@@ -5,7 +5,8 @@ import { find } from "underscore";
 import { isClient } from 'helpers/environment';
 import { fetchWrapper } from 'actions/wrapper';
 import { changeGridSize } from 'actions/game';
-import { createPieces } from 'logic/setuppieces';
+import { createPieces } from 'game/setuppieces';
+import { availableMoves } from 'game/updatepieces';
 import ActivePiece from 'components/ActivePiece';
 import InactivePiece from 'components/InactivePiece';
 import Destination from 'components/Destination';
@@ -18,7 +19,7 @@ class PieceContainer extends Component {
 
   	render() {
 
-      const { pieces, row, col, clearPieceSelections, setPieceSelection } = this.props;
+      const { gridSize, pieces, row, col, clearPieceSelections, setPieceSelection } = this.props;
 
       const colours = ['', 'red', 'green'];
 
@@ -36,7 +37,7 @@ class PieceContainer extends Component {
       if(thisPiece){
 
         thisPiece.colour = colours[thisPiece.player];
-        isActive = false; // TODO
+        isActive = availableMoves(pieces, thisPiece, gridSize);
         isLanding = thisPiece.type === 'landing' ? true: false;
 
         if(isActive && !isLanding){
@@ -69,4 +70,4 @@ function mapDispatchToProps(dispatch) {
   }
 };
 
-export default connect(mapDispatchToProps)(PieceContainer);
+export default connect(null, mapDispatchToProps)(PieceContainer);
