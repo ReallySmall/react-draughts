@@ -19,7 +19,7 @@ class PieceContainer extends Component {
 
   	render() {
 
-      const { gridSize, pieces, row, col, clearPieceSelections, setPieceSelection } = this.props;
+      const { gridSize, activePlayer,pieces, row, col, clearPieceSelections, setPieceSelection } = this.props;
 
       const colours = ['', 'red', 'green'];
 
@@ -37,8 +37,13 @@ class PieceContainer extends Component {
       if(thisPiece){
 
         thisPiece.colour = colours[thisPiece.player];
-        isActive = availableMoves(pieces, thisPiece, gridSize);
         isLanding = thisPiece.type === 'landing' ? true: false;
+
+        if(thisPiece.player === activePlayer){
+          isActive = availableMoves(pieces, thisPiece, gridSize);
+        } else {
+          isActive === false;
+        }
 
         if(isActive && !isLanding){
           markup = <ActivePiece {...thisPiece} pieces={pieces} clearPieceSelections={clearPieceSelections} setPieceSelection={setPieceSelection} />
