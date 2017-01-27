@@ -9,9 +9,6 @@ export default class InactivePiece extends Component {
   render(){
 
   	const { colour, player, type } = this.props;
-
-  	console.log(this.props);
-
   	const accessibleInfo = <span className={cx('visually-hidden')}>Player {player} {type}</span>;
 
     return (

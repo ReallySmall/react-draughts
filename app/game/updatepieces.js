@@ -10,52 +10,52 @@ var getMatchingSquare = function(square1, square2) {
 // Calculate the moves available to a piece
 var availableMoves = function(pieces, activePiece, gridSize){
 
-	let availableNextSquareCellRefs = [];
+	const type = activePiece.type;
+	const player = activePiece.player;
+	const cellRef = activePiece.cellRef;
+	
+	let theoreticalNextSquareCellRefs = [];
+	let hasAvailableMoves = true;
 
- 	map(pieces, function(piece, i){
+	if(player > 0){
 
-	 	if(getMatchingSquare(piece, activePiece)){
-	 			// TODO
-	      const type = piece.type;
-	      const player = piece.player;
+		const directionOfPlay = player === 1 ? +1 : -1;
+		const reverseDirectionOfPlay = player === 1 ? -1 : +1;
 
-	      if(player > 0){
+		theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col + 1, row: cellRef.row + directionOfPlay }});
+		theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col - 1, row: cellRef.row + directionOfPlay }});
 
-	        const directionOfPlay = player === 1 ? -1 : +1;
-	        const reverseDirectionOfPlay = player === 1 ? +1 : -1;
-	        const { row, col } = piece.cellRef;
+		if(type === 'king'){
 
-	        let nextSquareCellRefs = [
-	          { cellRef: { row: row + directionOfPlay, col: col -1 }},
-	          { cellRef: { row: row + directionOfPlay, col: col +1 }}
-	        ];
+			theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col + 1, row: cellRef.row + reverseDirectionOfPlay }});
+			theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col - 1, row: cellRef.row + reverseDirectionOfPlay }});
 
-	        if(type === 'king'){
-	          nextSquareCellRefs.push({cellRef: { row: row + reverseDirectionOfPlay, col: col -1 }});
-	          nextSquareCellRefs.push({cellRef: { row: row + reverseDirectionOfPlay, col: col +1 }});
-	        }
+		}
 
-	        var filteredNextSquareCellRefs = reject(nextSquareCellRefs, function(cellRef) { 
-	          return (cellRef.row < 0 || cellRef.row >= gridSize || cellRef.col < 0 || cellRef.col >= gridSize); 
-	        });
+		map(pieces, function(piece, i){
 
-	        map(pieces, function(piece, i){
-	        	for(var j = 0; j < filteredNextSquareCellRefs.length; j++){
-	        		if(getMatchingSquare(piece, filteredNextSquareCellRefs[j]) && filteredNextSquareCellRefs[j].type !== 'pawn' && filteredNextSquareCellRefs[j].type !== 'king'){
-	        			availableNextSquareCellRefs.push(filteredNextSquareCellRefs[j]);
-	        		}
-	        	}
-	        });
+			for(let i = 0; i < theoreticalNextSquareCellRefs.length; i++){
 
-	        console.log(availableNextSquareCellRefs);
+				const item = theoreticalNextSquareCellRefs[i];
 
-	      }
+				if(getMatchingSquare(piece, item)){
 
- 		}
+					if(piece.player === player){
+						hasAvailableMoves = false;
+					} else {
+						// TODO
+						// find out if square beyond is empty
+					}
 
-	});
+				}
 
-	if(availableNextSquareCellRefs.length){
+			}
+
+		});
+
+	}
+
+	if(hasAvailableMoves){
 		return true;
 	}
 
