@@ -22,20 +22,25 @@ const App = ({children, location}) => {
   return (
     <div>
       <Helmet {...config}/>
-      <div className={cx('view-container')}>
-        <div className={cx('page-backing')}>
-          <div className={cx('container')}></div>
-        </div>
-        <ReactCSSTransitionGroup 
-          component="div"
-          transitionName="fade" 
-          transitionEnterTimeout={250} 
-          transitionLeaveTimeout={250}>
-            {React.cloneElement(children, {
-              key: location.pathname
-            })}
-        </ReactCSSTransitionGroup>
-     	</div>
+      <header>
+        <HeaderContainer />
+      </header>
+      <main>
+        <div className={cx('view-container')}>
+          <div className={cx('page-backing')}>
+            <div className={cx('container')}></div>
+          </div>
+          <ReactCSSTransitionGroup 
+            component="div"
+            transitionName="fade" 
+            transitionEnterTimeout={250} 
+            transitionLeaveTimeout={250}>
+              {React.cloneElement(children, {
+                key: location.pathname
+              })}
+          </ReactCSSTransitionGroup>
+       	</div>
+      </main>
     </div>
   );
 };

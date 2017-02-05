@@ -2,26 +2,43 @@
 import { polyfill } from 'es6-promise';
 import md5 from 'spark-md5';
 import * as types from 'constants/index';
-import { availableMoves, unselectAllPieces, selectPiece } from 'game/updatepieces';
 
 polyfill();
 
 // Clear any current piece selections
-export function clearPieceSelections(pieces) {
+export function createPieceCollection() {
 
 	return {
-		type: types.CLEAR_PIECE_SELECTIONS,
-		pieces: unselectAllPieces(pieces)
+		type: types.CREATE_PIECE_COLLECTION
 	}
 
-}
+};
+
+// Clear any current piece selections
+export function clearPieceSelections() {
+
+	return {
+		type: types.CLEAR_PIECE_SELECTIONS
+	}
+
+};
 
 // Clear any current piece selections and enable selection on current piece
-export function setPieceSelection(pieces, piece) {
+export function setPieceSelection(piece) {
 
 	return {
 		type: types.SET_PIECE_SELECTION,
-		pieces: selectPiece(pieces, piece)
+		piece: piece
 	}
 
-}
+};
+
+// Move the active piece to the clicked position
+export function moveActivePieceToHere(piece) {
+
+	return {
+		type: types.MOVE_ACTIVE_PIECE,
+		piece: piece
+	}
+
+};

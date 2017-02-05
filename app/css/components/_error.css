@@ -1,4 +1,5 @@
-@import '../main.css';
+@import '../variables.css';
+@import '../grid.css';
 
 .error {
   line-height: 1rem;

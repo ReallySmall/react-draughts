@@ -1,106 +1,12 @@
-@import '../main.css';
+@import '../variables.css';
+@import '../grid.css';
 
-.site-header {
-  background: $grey;
-  border-top: 2px solid $black;
-  border-bottom: 2px solid $black;
-  .site-branding {
-    display: block;
-    float: left;
-    overflow: hidden;
-    margin: 15px 0;
-    .animated-site-logo {
-      display: none;
-      float: left;
-      font-size: 46px;
-      margin: 0;
-      .fa-pause {
-        color: $light-grey;
-        font-size: 0.9em;
-      }
-      .fa-camera {
-        color: $orange;
-        margin-left: 6px;
-      }
-    }
-    .site-descriptor {
-      margin: 0 0 0 15px;
-      float: left;
-    }
-    &:hover, &:focus, &:active {
-      .site-title, .fa-camera { 
-        color: $white;
-        text-decoration: none;
-      }
-    }
+.header-container {
+  h1, h2 {
+    color: antiquewhite;
+    margin: 20px 0 0 0;
   }
-  .site-slogan {
-    margin: 0;
-    color: $white;
-    clear: both;
+  p {
+  	color: antiquewhite;
   }
-}
-
-.site-title { 
-  color: $orange;
-  margin: -5px 0 0 0;
-  line-height: 38px;
-  font-size: 26px;
-}
-
-#navigation {
-  float: right;
-  #main-menu {
-    margin-top: 40px;
-  }
-}
-
-.social-links {
-  display: none;
-  margin: 22px 0;
-  ul {
-    float: left;
-    font-size: 24px;
-    li {
-      float: left;
-      padding-left: 20px;
-      a {
-        display: block;
-        color: $light-grey;
-        &:hover, &:focus, &:active {
-          color: $lightest-grey;
-        }
-        .fa {
-          display: block;
-        }
-      }
-    }
-  }
-}
-
-@media (min-width: 768px) {
-
-  .site-header {
-    background: $grey;
-    border-top: 2px solid $black;
-    .site-branding {
-      margin: 22px 0;
-      .animated-site-logo {
-        display: block;
-      }
-    }
-  }
-
-  .site-title {
-    font-size: 36px;
-  }
-
-  .social-links {
-    display: block;
-    ul {
-      float: right;
-      font-size: 48px;
-    }
-  }
-
 }

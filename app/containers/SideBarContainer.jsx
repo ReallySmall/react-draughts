@@ -33,7 +33,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setGameType: (type) => dispatch(setGameType(type)),
+    setGameType: (typeId) => dispatch(setGameType(typeId)),
     startGame: () => dispatch(startGame())
   }
 };

@@ -1,7 +1,9 @@
-@import '../main.css';
+@import '../variables.css';
+@import '../grid.css';
 
 .board {
 	overflow: hidden;
-  	border: 2px solid orange;
+  	border: 2px solid #B5A642;
   	margin: 0px 0px 25px 0px;
+  	border-radius: 4px;
 }

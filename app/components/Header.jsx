@@ -18,9 +18,11 @@ export default class Header extends Component {
   render() {
 
     return (
-      <div className={cx('header-container')}>
-          <header className={cx('site-header')}>
-                      </header>
+      <div className={cx('container', 'header-container')}>
+        <div className={cx('col-md-12')}>
+          <h1>React Draughts</h1>
+          <p>Current state: Started - a few bits work so far, but most not so much</p>
+        </div>
       </div>
     );
 

@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import wrapper from 'reducers/wrapper';
 import game from 'reducers/game';
-import pieces from 'reducers/pieces';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 // Combine reducers with routeReducer which keeps track of
@@ -9,7 +8,6 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 const rootReducer = combineReducers({
   wrapper,
   game,
-  pieces,
   routing: routerReducer
 });
 

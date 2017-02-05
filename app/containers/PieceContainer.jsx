@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { clearPieceSelections, setPieceSelection } from 'actions/pieces';
+import { clearPieceSelections, moveActivePieceToHere, setPieceSelection } from 'actions/pieces';
 import { find } from "underscore";
 import { isClient } from 'helpers/environment';
 import { fetchWrapper } from 'actions/wrapper';
@@ -9,7 +9,7 @@ import { createPieces } from 'game/setuppieces';
 import { availableMoves } from 'game/updatepieces';
 import ActivePiece from 'components/ActivePiece';
 import InactivePiece from 'components/InactivePiece';
-import Destination from 'components/Destination';
+import Landing from 'components/Landing';
 
 class PieceContainer extends Component {
 
@@ -19,14 +19,14 @@ class PieceContainer extends Component {
 
   	render() {
 
-      const { gridSize, activePlayer,pieces, row, col, clearPieceSelections, setPieceSelection } = this.props;
+      const { activePlayer, pieces, row, col, clearPieceSelections, moveActivePieceToHere, setPieceSelection } = this.props;
 
-      const colours = ['', 'red', 'green'];
+      const colours = ['', 'player1', 'player2'];
 
       let markup = null;
       let thisPiece = null;
-      let isActive = null;
       let isLanding = null;
+      let isActive = false;
 
       for(let i = 0; i < pieces.length; i++){
         if(pieces[i].cellRef.row === row && pieces[i].cellRef.col === col){
@@ -40,17 +40,15 @@ class PieceContainer extends Component {
         isLanding = thisPiece.type === 'landing' ? true: false;
 
         if(thisPiece.player === activePlayer){
-          isActive = availableMoves(pieces, thisPiece, gridSize);
-        } else {
-          isActive === false;
+          isActive = availableMoves(pieces, thisPiece).length > 0 ? true : false;
         }
 
         if(isActive && !isLanding){
-          markup = <ActivePiece {...thisPiece} pieces={pieces} clearPieceSelections={clearPieceSelections} setPieceSelection={setPieceSelection} />
+          markup = <ActivePiece {...thisPiece} clearPieceSelections={clearPieceSelections} setPieceSelection={setPieceSelection} />
         } else if(!isActive && !isLanding){
           markup = <InactivePiece {...thisPiece} />;
         } else if(isLanding){
-          markup = <Destination {...thisPiece} pieces={pieces} clearPieceSelections={clearPieceSelections} setPieceSelection={setPieceSelection} />
+          markup = <Landing {...thisPiece} moveActivePieceToHere={moveActivePieceToHere} />
         }
 
       }
@@ -66,12 +64,13 @@ class PieceContainer extends Component {
 
 PieceContainer.propTypes = {
   // todo
-};
+};   
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearPieceSelections: (pieces) => dispatch(clearPieceSelections(pieces)),
-    setPieceSelection: (pieces, piece) => dispatch(setPieceSelection(pieces, piece))
+    clearPieceSelections: () => dispatch(clearPieceSelections()),
+    setPieceSelection: (piece) => dispatch(setPieceSelection(piece)),
+    moveActivePieceToHere: (piece) => dispatch(moveActivePieceToHere(piece))
   }
 };
 

@@ -16,35 +16,35 @@ export default class Board extends Component {
 
   render() {
 
-    const { pieces, gridSize, activePlayer } = this.props;
+    const { grid, gridSize, activePlayer, pieces } = this.props;
+    let board = [];
 
-    let grid = []; // grid to populate with squares
+    for(let i = 0; i < grid.length; i++){
 
-    for(let i = 0; i < gridSize; i++){
+      let row = grid[i];
 
-      const rowId = i;
-      let row = []; // create row
+      for(let j = 0; j < row.length; j++){
 
-      for(let j = 0; j < gridSize; j++){
+        const square = row[j];
+        const { cellRef, inGame, style } = square;
 
-        const colId = j;
-        const cellRef = { row: i, col: j}; // ref to this cell in the grid
-        const modifier = rowId % 2 === 0 ? 0 : 1;
-        const inGame = (colId + modifier) % 2 === 0 ? true : false;
+        board.push(
 
-        row.push(<Square key={j} gridSize={gridSize} inGame={inGame}><PieceContainer pieces={pieces} {...cellRef} gridSize={gridSize} activePlayer={activePlayer} /></Square>); // add square to row
+          <Square key={i + '-' + j} gridSize={gridSize} inGame={inGame} style={style}>
+            <PieceContainer {...cellRef} activePlayer={activePlayer} pieces={pieces} />
+          </Square>
 
+        );
       }
 
-      grid.push(row); // add row to grid
+    }    
 
-    }
 
     return (
       <div className={cx('col-md-9')}>
           <section>
             <div className={cx('board')}>
-              {grid}
+              {board}
             </div>
           </section>
       </div>

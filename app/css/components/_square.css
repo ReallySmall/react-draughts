@@ -1,4 +1,5 @@
-@import '../main.css';
+@import '../variables.css';
+@import '../grid.css';
 
 .square {
 	position: relative;
@@ -7,9 +8,12 @@
 	padding-bottom: 12.5%;
 	float: left;
 	background-color: $white;
-	border: 2px solid orange;
+	background-image: url('../light-tile.jpg');
+	border: 1px solid gray;
+	outline: 1px solid #B5A642;
 	&.alt {
 		background-color: $black;
+		background-image: url('../dark-tile.jpg');
 	}
 	&.col-end {
 		clear: right;

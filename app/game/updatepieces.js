@@ -1,4 +1,4 @@
-import { map, reject } from 'underscore';
+import { map } from 'underscore';
 
 var getMatchingSquare = function(square1, square2) {
   if(square1.cellRef.row === square2.cellRef.row && square1.cellRef.col === square2.cellRef.row){
@@ -8,58 +8,54 @@ var getMatchingSquare = function(square1, square2) {
 };
 
 // Calculate the moves available to a piece
-var availableMoves = function(pieces, activePiece, gridSize){
+var availableMoves = function(pieces, activePiece){
 
 	const type = activePiece.type;
 	const player = activePiece.player;
 	const cellRef = activePiece.cellRef;
 	
-	let theoreticalNextSquareCellRefs = [];
-	let hasAvailableMoves = true;
+	let potentialMoves = [];
 
 	if(player > 0){
 
 		const directionOfPlay = player === 1 ? +1 : -1;
 		const reverseDirectionOfPlay = player === 1 ? -1 : +1;
+		let impossibleMoves = [];
+		let z;
 
-		theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col + 1, row: cellRef.row + directionOfPlay }});
-		theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col - 1, row: cellRef.row + directionOfPlay }});
+		potentialMoves = [
+			{ cellRef: { col: cellRef.col + 1, row: cellRef.row + directionOfPlay }},
+			{ cellRef: { col: cellRef.col - 1, row: cellRef.row + directionOfPlay }}
+		];
 
 		if(type === 'king'){
 
-			theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col + 1, row: cellRef.row + reverseDirectionOfPlay }});
-			theoreticalNextSquareCellRefs.push({ cellRef: { col: cellRef.col - 1, row: cellRef.row + reverseDirectionOfPlay }});
+			potentialMoves.push({ cellRef: { col: cellRef.col + 1, row: cellRef.row + reverseDirectionOfPlay }});
+			potentialMoves.push({ cellRef: { col: cellRef.col - 1, row: cellRef.row + reverseDirectionOfPlay }});
 
 		}
 
 		map(pieces, function(piece, i){
 
-			for(let i = 0; i < theoreticalNextSquareCellRefs.length; i++){
+			map(potentialMoves, function(potentialMove, j){
 
-				const item = theoreticalNextSquareCellRefs[i];
-
-				if(getMatchingSquare(piece, item)){
-
+				if(getMatchingSquare(piece, potentialMove)){
 					if(piece.player === player){
-						hasAvailableMoves = false;
-					} else {
-						// TODO
-						// find out if square beyond is empty
+						impossibleMoves.push(j);
 					}
-
 				}
 
-			}
+			});
 
 		});
 
+		while((z = impossibleMoves.pop()) != null){
+    		potentialMoves.splice(z, 1);
+		}
+
 	}
 
-	if(hasAvailableMoves){
-		return true;
-	}
-
-	return false;
+	return potentialMoves;
 
 };
 
@@ -79,15 +75,64 @@ var unselectAllPieces = function(pieces){
 // Select a piece
 var selectPiece = function(pieces, activePiece){
 
+	let updatedPieces = [];
+	let potentialMoves = [];
+
    	map(pieces, function(piece, i){
 
-   		piece.selected = getMatchingSquare(piece, activePiece) ? true : false;
+   		if(piece.type !== 'landing'){
+
+	   		if(getMatchingSquare(piece, activePiece)){
+		   		piece.selected = true;
+		   		potentialMoves = availableMoves(pieces, piece);
+	   		} else {
+	   			piece.selected = false;
+	   		}
+
+	   		updatedPieces.push(piece);
+
+   		}
 
   	});
 
-	return pieces;
+	map(potentialMoves, function(potentialMove, i){
+
+		potentialMove.type = 'landing';
+		potentialMove.selected = false;
+		
+		updatedPieces.push(potentialMove);
+
+  	});
+
+	return updatedPieces;
 
 };
 
-export { getMatchingSquare, availableMoves, unselectAllPieces, selectPiece };
+// Move a piece
+var moveActivePiece = function(pieces, landingPiece){
+
+	let updatedPieces = [];
+
+	map(pieces, function(piece, i){
+
+   		if(piece.selected){
+
+   			piece.selected = false;
+   			piece.cellRef = landingPiece.cellRef;
+
+   		}
+
+   		if(piece.type !== 'landing'){
+
+   			updatedPieces.push(piece);
+
+   		}
+
+  	});
+	
+	return updatedPieces;
+
+};
+
+export { getMatchingSquare, availableMoves, unselectAllPieces, selectPiece, moveActivePiece };
 

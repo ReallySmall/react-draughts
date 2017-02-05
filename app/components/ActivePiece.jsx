@@ -8,7 +8,7 @@ export default class ActivePiece extends Component {
 
   render(){
 
-  	const { colour, pieces, cellRef, player, type, selected, clearPieceSelections, setPieceSelection } = this.props;
+  	const { colour, cellRef, player, type, selected, clearPieceSelections, setPieceSelection } = this.props;
   	const accessibleInfo = <span className={cx('visually-hidden')}>Player {player} {type}</span>;
     const selectedClass = selected === true ? 'selected' : '';
     const thisPiece = {
@@ -20,7 +20,7 @@ export default class ActivePiece extends Component {
         onClick={
           (event) => {
             event.preventDefault();
-            setPieceSelection(pieces, thisPiece);
+            setPieceSelection(thisPiece);
           }
         }>{accessibleInfo}</button>
     );

@@ -1,0 +1,9 @@
+@import '../variables.css';
+@import '../grid.css';
+
+.side-bar {
+  padding: 20px;
+  background: whitesmoke;
+  border-radius: 4px;
+}
+
