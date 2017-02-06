@@ -5,7 +5,6 @@ import Helmet from 'react-helmet';
 import Board from 'components/Board';
 import GameSettings from 'components/GameSettings'; 
 import CurrentGame from 'components/CurrentGame'; 
-import GameProgress from 'components/GameProgress'; 
 
 const cx = classNames.bind(styles);
 

@@ -513,6 +513,15 @@ noscript {
   float: none !important;
 }
 
+.scroll-wrapper {
+  height: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  ul {
+    padding-right: 10px;
+  }
+}
+
 @media (min-width: 768px) {
 
   h1 { 

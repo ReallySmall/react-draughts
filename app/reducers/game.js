@@ -19,6 +19,7 @@ export default function game(state = {
   gridSize: 8,
   startingPieceCount: 12,
   activePlayer: 0,
+  players: ['Player 1', 'Player 2'],
   started: false,
   history: [],
   moves: 0,
@@ -60,7 +61,7 @@ export default function game(state = {
     case MOVE_ACTIVE_PIECE:
       return Object.assign({}, state, {
         pieces: moveActivePiece(state.pieces, action.piece),
-        history: [...state.history, 'Player' + state.activePlayer + 'did an awesome move'],
+        history: [...state.history, 'Player ' + state.activePlayer + ' did an awesome move'],
         activePlayer: state.activePlayer === 1 ? 2 : 1
       });
 

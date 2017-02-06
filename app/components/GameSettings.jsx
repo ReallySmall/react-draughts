@@ -9,7 +9,7 @@ export default class GameSettings extends Component {
 
   render(){
 
-  	const { setGameType, startGame } = this.props;
+  	const { setGameType, players, startGame } = this.props;
 
     return (
     	<aside>
@@ -31,11 +31,11 @@ export default class GameSettings extends Component {
                 <fieldset>
                     <div className={cx('form-control')}>
                         <label htmlFor="player-one-name">Player One name</label>
-                        <input id="player-one-name" type="text" value="Player One" />
+                        <input id="player-one-name" type="text" value={players[0]} />
                     </div>
                     <div className={cx('form-control')}>
                         <label htmlFor="player-two-name">Player Two name</label>
-                        <input id="player-two-name" type="text" value="Player Two" />
+                        <input id="player-two-name" type="text" value={players[1]} />
                     </div>
                 </fieldset>
                 <button onClick={

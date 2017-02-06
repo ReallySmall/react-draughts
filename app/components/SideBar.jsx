@@ -10,14 +10,15 @@ export default class SideBar extends Component {
 
   render(){
 
-  	const { activePlayer, started, history, setGameType, startGame } = this.props;
+  	const { activePlayer, players, started, history, setGameType, startGame } = this.props;
 
     return (
 		<div className={cx('col-md-3', 'side-bar')}>
-			{!started && <GameSettings setGameType={setGameType} startGame={startGame} />}
-			{started && <CurrentGame activePlayer={activePlayer} history={history} />}
+			{!started && <GameSettings setGameType={setGameType} players={players} startGame={startGame} />}
+			{started && <CurrentGame activePlayer={activePlayer} players={players} history={history} />}
         </div>
     );
+
   }
 
 }

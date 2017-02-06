@@ -9,20 +9,22 @@ export default class CurrentGame extends Component {
 
   render(){
 
-  	const { activePlayer, history } = this.props;
+  	const { activePlayer, players, history } = this.props;
 
     return (
     	<aside>
             <h2>Current Game</h2>
-            <ul>
-            	{map(history, function(gameEvent, i){
-            		return (
-            			<li>{gameEvent}</li>
-            		)
-            	})}
-            </ul>
+            <div className={cx('scroll-wrapper')}>
+	            <ul className={cx('plain')}>
+	            	{map(history, function(gameEvent, i){
+	            		return (
+	            			<li key={i}>{gameEvent}</li>
+	            		)
+	            	})}
+	            </ul>
+            </div>
             <h3>Current player</h3>
-            <p>{activePlayer}</p>
+            <p>{players[activePlayer]}</p>
         </aside>
     );
   }
