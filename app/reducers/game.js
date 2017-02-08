@@ -1,5 +1,5 @@
 import { createGrid, createPieces } from 'game/setuppieces';
-import { availableMoves, unselectAllPieces, selectPiece, moveActivePiece } from 'game/updatepieces';
+import { availableMoves, unselectAllPieces, selectPiece, setActivePieces, moveActivePiece } from 'game/updatepieces';
 import {
   CHANGE_GAME_TYPE_SUCCESS,
   SET_ACTIVE_PLAYER,
@@ -18,7 +18,7 @@ export default function game(state = {
   grid: createGrid(defaultGridSize),
   gridSize: 8,
   startingPieceCount: 12,
-  activePlayer: 0,
+  activePlayer: null,
   players: ['Player 1', 'Player 2'],
   started: false,
   history: [],
@@ -39,13 +39,14 @@ export default function game(state = {
     case START_GAME:
       return Object.assign({}, state, {
         started: true,
-        activePlayer: 1,
-        history: [...state.history, 'New game started']
+        activePlayer: 0,
+        history: ['New game started', ...state.history],
+        pieces: setActivePieces(state.pieces, 0)
       });
 
     case CREATE_PIECE_COLLECTION:
       return Object.assign({}, state, {
-        pieces: createPieces(gridSize, startingPieceCount)
+        pieces: createPieces(state.gridSize, state.startingPieceCount)
       });
 
     case SET_PIECE_SELECTION:
@@ -61,8 +62,8 @@ export default function game(state = {
     case MOVE_ACTIVE_PIECE:
       return Object.assign({}, state, {
         pieces: moveActivePiece(state.pieces, action.piece),
-        history: [...state.history, 'Player ' + state.activePlayer + ' did an awesome move'],
-        activePlayer: state.activePlayer === 1 ? 2 : 1
+        history: ['Player ' + state.activePlayer + ' moved a piece', ...state.history],
+        activePlayer: state.activePlayer === 0 ? 1 : 0
       });
 
     default:

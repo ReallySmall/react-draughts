@@ -19,29 +19,15 @@ class PieceContainer extends Component {
 
   	render() {
 
-      const { activePlayer, pieces, row, col, clearPieceSelections, moveActivePieceToHere, setPieceSelection } = this.props;
-
-      const colours = ['', 'player1', 'player2'];
+      const { activePlayer, pieces, cellRef, clearPieceSelections, moveActivePieceToHere, setPieceSelection } = this.props;
+      const thisPiece = pieces[cellRef];
 
       let markup = null;
-      let thisPiece = null;
-      let isLanding = null;
-      let isActive = false;
-
-      for(let i = 0; i < pieces.length; i++){
-        if(pieces[i].cellRef.row === row && pieces[i].cellRef.col === col){
-          thisPiece = pieces[i];
-        }
-      }
 
       if(thisPiece){
 
-        thisPiece.colour = colours[thisPiece.player];
-        isLanding = thisPiece.type === 'landing' ? true: false;
-
-        if(thisPiece.player === activePlayer){
-          isActive = availableMoves(pieces, thisPiece).length > 0 ? true : false;
-        }
+        const isLanding = thisPiece.type === 'landing' ? true : false;
+        const isActive = thisPiece.active;;
 
         if(isActive && !isLanding){
           markup = <ActivePiece {...thisPiece} clearPieceSelections={clearPieceSelections} setPieceSelection={setPieceSelection} />

@@ -31,7 +31,7 @@ export default class Board extends Component {
         board.push(
 
           <Square key={i + '-' + j} gridSize={gridSize} inGame={inGame} style={style}>
-            <PieceContainer {...cellRef} activePlayer={activePlayer} pieces={pieces} />
+            <PieceContainer cellRef={cellRef} activePlayer={activePlayer} pieces={pieces} />
           </Square>
 
         );

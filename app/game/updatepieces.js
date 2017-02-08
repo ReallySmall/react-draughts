@@ -1,34 +1,34 @@
 import { map } from 'underscore';
 
-
-var getMatchingSquare = function(square1, square2) {
-  if(square1.cellRef.row === square2.cellRef.row && square1.cellRef.col === square2.cellRef.row){
-    return true;
-  };
-  return false;
-};
-
-
 // Calculate the potential moves a piece could make
-var potentialMoves = function(activePiece){
+var potentialMoves = function(pieces, activePieceCellRef, gridSize){
 
+	const activePiece = pieces[activePieceCellRef];
 	const type = activePiece.type;
 	const player = activePiece.player;
-	const cellRef = activePiece.cellRef;
-	const directionOfPlay = player === 1 ? +1 : -1;
-	const reverseDirectionOfPlay = player === 1 ? -1 : +1;
+	const cellRef = activePiece.cellRef.split('_');
+	const directionOfPlay = player === 0 ? +1 : -1;
+	const reverseDirectionOfPlay = player === 0 ? -1 : +1;
 
-	let potentialMoves = [
-		{ cellRef: { col: cellRef.col + 1, row: cellRef.row + directionOfPlay }},
-		{ cellRef: { col: cellRef.col - 1, row: cellRef.row + directionOfPlay }}
-	];
+	let potentialMoves = [];
 
-	if(type === 'king'){
+	const forward = parseInt(cellRef[0]) + directionOfPlay);
+	const left = parseInt(cellRef[1]) - 1);
+	const right = parseInt(cellRef[1]) + 1)
 
-		potentialMoves.push({ cellRef: { col: cellRef.col + 1, row: cellRef.row + reverseDirectionOfPlay }});
-		potentialMoves.push({ cellRef: { col: cellRef.col - 1, row: cellRef.row + reverseDirectionOfPlay }});
+	if(forward < gridSize){
+
+		if(left >=  0){
+			potentialMoves.push(forward.toString() + '_' + left.toString());
+		}
+
+		if(right < gridSize){
+			potentialMoves.push(forward.toString() + '_' + right.toString());
+		}		
 
 	}
+
+	if(type === 'king'){}
 
 	return potentialMoves;
 
@@ -36,58 +36,51 @@ var potentialMoves = function(activePiece){
 
 
 // Calculate the moves available to a piece
-var availableMoves = function(pieces, activePiece){
+var availableMoves = function(pieces, activePieceCellRef){
 
-	const type = activePiece.type;
-	const player = activePiece.player;
-	const otherPlayer = player === 1? 2: 1;
-	const cellRef = activePiece.cellRef;
-	
-	let availableSingleMoves = potentialMoves(activePiece);
+	const activePiece = pieces[activePieceCellRef];
+
 	let availableScoringMoves = [];
 	let allAvailableMoves = [];
 	let impossibleMoves = [];
 	let z;
 
-	map(pieces, function(piece, i){ // check if the adjacent diagonal squares are empty
+	if(activePiece){
+
+		const player = activePiece.player;
+		const otherPlayer = player === 0 ? 1: 0;
+		
+		let availableSingleMoves = potentialMoves(pieces, activePieceCellRef);
 
 		map(availableSingleMoves, function(availableSingleMove, j){
 
-			if(getMatchingSquare(piece, availableSingleMove)){
-				if(piece.player > 0){ // can't land on another piece
-					impossibleMoves.push(j);
-					if(piece.player === otherPlayer){ // if square occupied by opposing piece
-						//availableScoringMoves.push(potentialMoves(piece)) // check if square behind it is empty
-					}
+			const piece = pieces[availableSingleMove];
+
+			if(piece && piece.player > -1){ // can't land on another piece
+				impossibleMoves.push(availableSingleMove);
+				if(piece.player === otherPlayer){ // if square occupied by opposing piece
+					//availableScoringMoves.push(potentialMoves(pieces, piece)) // check if square behind it is empty
 				}
 			}
 
 		});
 
-	});
+		map(availableScoringMoves, function(availableScoringMove, k){
 
-	if(availableScoringMoves.length){ // check if the diagonal square behind an adjacent opposing piece is empty
+			const piece = pieces[availableScoringMove];
 
-		map(pieces, function(piece, i){ // check if the adjacent diagonal squares are empty
-
-			map(availableScoringMoves, function(availableScoringMove, k){
-
-				if(getMatchingSquare(piece, availableScoringMove)){
-					if(piece.player > 0){ // can't land on another piece
-						impossibleMoves.push(k);
-					}
-				}
-
-			});
+			if(piece && piece.player > -1){ // can't land on another piece
+				impossibleMoves.push(availableScoringMove);
+			}
 
 		});
 
-	}
+		allAvailableMoves = [...availableSingleMoves, ...availableScoringMoves];
 
-	allAvailableMoves = [...availableSingleMoves, ...availableScoringMoves];
+		while((z = impossibleMoves.pop()) != null){ // remove all the impossible moves from the list of potential moves
+			allAvailableMoves.splice(z, 1);
+		}
 
-	while((z = impossibleMoves.pop()) != null){ // remove all the impossible moves from the list of potential moves
-		allAvailableMoves.splice(z, 1);
 	}
 
 	return allAvailableMoves;
@@ -98,15 +91,13 @@ var availableMoves = function(pieces, activePiece){
 // Unselect all pieces
 var unselectAllPieces = function(pieces){
 
-	let updatedPieces = [];
-	
-   	map(pieces, function(piece, i){
+	let updatedPieces = Object.assign({}, pieces);
 
-   		let updatedPiece = piece;
-   		updatedPiece.selected = false;
-   		updatedPieces.push(updatedPiece);
-
-  	});
+	for (var piece in updatedPieces) {
+		if (updatedPieces.hasOwnProperty(piece)) {  
+    		updatedPieces[piece]['selected'] = false;
+		}
+	}
 
 	return updatedPieces;
 
@@ -114,36 +105,26 @@ var unselectAllPieces = function(pieces){
 
 
 // Select a piece
-var selectPiece = function(pieces, activePiece){
+var selectPiece = function(pieces, activePieceCellRef){
 
-	let updatedPieces = [];
+	let updatedPieces = Object.assign({}, pieces);
 	let potentialMoves = [];
 
-   	map(pieces, function(piece, i){
+	for (var piece in updatedPieces) {
+		if (updatedPieces.hasOwnProperty(piece)) {  
+    		updatedPieces[piece]['selected'] = false;
+		} 
+	}
 
-   		if(piece.type !== 'landing'){
-
-	   		if(getMatchingSquare(piece, activePiece)){
-		   		piece.selected = true;
-		   		potentialMoves = availableMoves(pieces, piece);
-	   		} else {
-	   			piece.selected = false;
-	   		}
-
-	   		updatedPieces.push(piece);
-
-   		}
-
-  	});
+	updatedPieces[activePieceCellRef]['selected'] = true;
+	
+	potentialMoves = availableMoves(updatedPieces, activePieceCellRef);
 
 	map(potentialMoves, function(potentialMove, i){
 
-		potentialMove.type = 'landing';
-		potentialMove.selected = false;
+		updatedPieces[potentialMove] = { type: 'landing', selected: false };
 		
-		updatedPieces.push(potentialMove);
-
-  	});
+ 	});
 
 	return updatedPieces;
 
@@ -151,29 +132,38 @@ var selectPiece = function(pieces, activePiece){
 
 
 // Move a piece
-var moveActivePiece = function(pieces, landingPiece){
+var moveActivePiece = function(pieces, landingPieceCellRef){
 
-	let updatedPieces = [];
+	let updatedPieces = Object.assign({}, pieces);
 
-	map(pieces, function(piece, i){
+	for (var piece in updatedPieces) {
+		if (updatedPieces.hasOwnProperty(piece)) { 
+			if(updatedPieces[piece]['selected'] === true){
+				updatedPieces[piece]['cellRef'] = landingPieceCellRef
+			} 
+    		updatedPieces[piece]['selected'] = false;
+		} 
+	}
 
-   		if(piece.selected){
-
-   			piece.selected = false;
-   			piece.cellRef = landingPiece.cellRef;
-
-   		}
-
-   		if(piece.type !== 'landing'){
-
-   			updatedPieces.push(piece);
-
-   		}
-
-  	});
-	
 	return updatedPieces;
 
 };
 
-export { getMatchingSquare, availableMoves, unselectAllPieces, selectPiece, moveActivePiece };
+
+// Move a piece
+var setActivePieces = function(pieces, activePlayer){
+
+	let updatedPieces = Object.assign({}, pieces);
+
+	for (var piece in updatedPieces) {
+		if (updatedPieces.hasOwnProperty(piece)) { 
+			updatedPieces[piece]['active'] = (updatedPieces[piece]['player'] === activePlayer && availableMoves(pieces, updatedPieces[piece]['cellRef']).length) ? true : false;
+		} 
+	}
+
+	return updatedPieces;
+
+};
+
+
+export { availableMoves, unselectAllPieces, selectPiece, setActivePieces, moveActivePiece };

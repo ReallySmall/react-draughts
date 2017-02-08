@@ -11,16 +11,13 @@ export default class ActivePiece extends Component {
   	const { colour, cellRef, player, type, selected, clearPieceSelections, setPieceSelection } = this.props;
   	const accessibleInfo = <span className={cx('visually-hidden')}>Player {player} {type}</span>;
     const selectedClass = selected === true ? 'selected' : '';
-    const thisPiece = {
-      cellRef: cellRef
-    };
 
     return (
       <button className={cx('piece', 'moveable', colour, type, selectedClass)}
         onClick={
           (event) => {
             event.preventDefault();
-            setPieceSelection(thisPiece);
+            setPieceSelection(cellRef);
           }
         }>{accessibleInfo}</button>
     );

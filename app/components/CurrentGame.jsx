@@ -14,6 +14,7 @@ export default class CurrentGame extends Component {
     return (
     	<aside>
             <h2>Current Game</h2>
+            <p>{players[activePlayer]} - it's your turn</p>
             <div className={cx('scroll-wrapper')}>
 	            <ul className={cx('plain')}>
 	            	{map(history, function(gameEvent, i){
@@ -23,8 +24,6 @@ export default class CurrentGame extends Component {
 	            	})}
 	            </ul>
             </div>
-            <h3>Current player</h3>
-            <p>{players[activePlayer]}</p>
         </aside>
     );
   }

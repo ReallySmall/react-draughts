@@ -12,7 +12,7 @@ var createGrid = function(gridSize){
 	      for(let j = 0; j < gridSize; j++){
 
 	        const colId = j;
-	        const cellRef = { row: i, col: j}; // ref to this cell in the grid
+	        const cellRef = rowId.toString() + '_' + colId.toString(); // ref to this cell in the grid
 	        const modifier = rowId % 2 === 0 ? 0 : 1;
 	        const inGame = (colId + modifier) % 2 === 0 ? true : false;
 	        const style = {
@@ -42,7 +42,7 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 	
 	if(gridSize && piecesPerPlayer){
 
-		let pieces = [];
+		let pieces = {};
 		let playerOnePiecesDeployed = 0;
 		let playerTwoPiecesDeployed = 0;
 
@@ -53,7 +53,7 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 	      for(let j = 0; j < gridSize; j++){
 
 	        const colId = j;
-	        const cellRef = { row: rowId, col: colId }; // ref to this cell in the grid
+	        const cellRef = rowId.toString() + '_' + colId.toString(); // ref to this cell in the grid
 	        const modifier = rowId % 2 === 0 ? 0 : 1;
 	        const inGame = (colId + modifier) % 2 === 0 ? true : false;
 
@@ -61,14 +61,15 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 
 		        let piece = { 
 		        	cellRef: cellRef, 
-		        	player: 1, 
+		        	player: 0,
+		        	colour: 'player1', 
 		        	type: 'pawn', 
 		        	active: false, 
 		        	selected: false 
 		        };
 
     	        playerOnePiecesDeployed++;
-    		    pieces.push(piece); // add piece
+    		    pieces[cellRef] = piece; // add piece
 
 	        }
 
@@ -83,7 +84,7 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 	      	for(let l = gridSize - 1; l >= 0; l--){
 
 	        	const colId = l;
-	        	const cellRef = { row: rowId, col: colId}; // ref to this cell in the grid
+	        	const cellRef = rowId.toString() + '_' + colId.toString(); // ref to this cell in the grid
 	        	const modifier = rowId % 2 === 0 ? 0 : 1;
 	        	const inGame = (colId + modifier) % 2 === 0 ? true : false;
 
@@ -91,14 +92,15 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 
 			        let piece = { 
 			        	cellRef: cellRef, 
-			        	player: 2, 
+			        	player: 1,
+			        	colour: 'player2', 
 			        	type: 'pawn', 
 			        	active: false, 
 			        	selected: false 
 			        };
 
     	        	playerTwoPiecesDeployed++;
-    		    	pieces.push(piece); // add piece
+    		    	pieces[cellRef] = piece; // add piece
 
 	        	}
 

@@ -17,9 +17,7 @@ class HeaderContainer extends Component {
     }
 };
 
-HeaderContainer.propTypes = {
-  content: PropTypes.object.isRequired
-};
+HeaderContainer.propTypes = {};
 
 function mapStateToProps(state) {
   return {
