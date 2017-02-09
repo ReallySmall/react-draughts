@@ -51,7 +51,7 @@ export default function game(state = {
 
     case SET_PIECE_SELECTION:
       return Object.assign({}, state, {
-        pieces: selectPiece(state.pieces, action.piece)
+        pieces: selectPiece(state.pieces, action.cellRef)
       });
 
     case CLEAR_PIECE_SELECTIONS:
@@ -60,10 +60,15 @@ export default function game(state = {
       });
 
     case MOVE_ACTIVE_PIECE:
+
+      let updatedPieces = moveActivePiece(state.pieces, action.cellRef); // move the piece
+      let nextPlayer = state.activePlayer === 0 ? 1 : 0; // work out whether current player's turn is over
+      updatedPieces = setActivePieces(updatedPieces, nextPlayer); // set the active pieces for the next move
+
       return Object.assign({}, state, {
-        pieces: moveActivePiece(state.pieces, action.piece),
-        history: ['Player ' + state.activePlayer + ' moved a piece', ...state.history],
-        activePlayer: state.activePlayer === 0 ? 1 : 0
+        pieces: updatedPieces,
+        history: ['Player ' + state.players[state.activePlayer] + ' moved a piece', ...state.history],
+        activePlayer: nextPlayer
       });
 
     default:

@@ -24,21 +24,23 @@ export function clearPieceSelections() {
 };
 
 // Clear any current piece selections and enable selection on current piece
-export function setPieceSelection(piece) {
+export function setPieceSelection(cellRef) {
 
 	return {
 		type: types.SET_PIECE_SELECTION,
-		piece: piece
+		cellRef: cellRef
 	}
 
 };
 
 // Move the active piece to the clicked position
-export function moveActivePieceToHere(piece) {
+export function moveActivePieceToHere(cellRef) {
+
+	console.log(cellRef);
 
 	return {
 		type: types.MOVE_ACTIVE_PIECE,
-		piece: piece
+		cellRef: cellRef
 	}
 
 };

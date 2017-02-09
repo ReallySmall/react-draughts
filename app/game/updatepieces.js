@@ -1,7 +1,7 @@
-import { map } from 'underscore';
+import { omit, findWhere, map, mapObject } from 'underscore';
 
 // Calculate the potential moves a piece could make
-var potentialMoves = function(pieces, activePieceCellRef, gridSize){
+const potentialMoves = function(pieces, activePieceCellRef){
 
 	const activePiece = pieces[activePieceCellRef];
 	const type = activePiece.type;
@@ -12,21 +12,12 @@ var potentialMoves = function(pieces, activePieceCellRef, gridSize){
 
 	let potentialMoves = [];
 
-	const forward = parseInt(cellRef[0]) + directionOfPlay);
-	const left = parseInt(cellRef[1]) - 1);
-	const right = parseInt(cellRef[1]) + 1)
+	const forward = parseInt(cellRef[0]) + directionOfPlay;
+	const left = parseInt(cellRef[1]) - 1;
+	const right = parseInt(cellRef[1]) + 1;
 
-	if(forward < gridSize){
-
-		if(left >=  0){
-			potentialMoves.push(forward.toString() + '_' + left.toString());
-		}
-
-		if(right < gridSize){
-			potentialMoves.push(forward.toString() + '_' + right.toString());
-		}		
-
-	}
+	potentialMoves.push(forward.toString() + '_' + left.toString());
+	potentialMoves.push(forward.toString() + '_' + right.toString());
 
 	if(type === 'king'){}
 
@@ -36,7 +27,7 @@ var potentialMoves = function(pieces, activePieceCellRef, gridSize){
 
 
 // Calculate the moves available to a piece
-var availableMoves = function(pieces, activePieceCellRef){
+const availableMoves = function(pieces, activePieceCellRef){
 
 	const activePiece = pieces[activePieceCellRef];
 
@@ -89,15 +80,14 @@ var availableMoves = function(pieces, activePieceCellRef){
 
 
 // Unselect all pieces
-var unselectAllPieces = function(pieces){
+const unselectAllPieces = function(pieces){
 
-	let updatedPieces = Object.assign({}, pieces);
-
-	for (var piece in updatedPieces) {
-		if (updatedPieces.hasOwnProperty(piece)) {  
-    		updatedPieces[piece]['selected'] = false;
-		}
-	}
+	let updatedPieces = mapObject(pieces, function (piece) { 
+		piece.selected = false;
+		if(piece.type !== 'landing'){
+			return piece;
+		} 
+	});
 
 	return updatedPieces;
 
@@ -105,16 +95,10 @@ var unselectAllPieces = function(pieces){
 
 
 // Select a piece
-var selectPiece = function(pieces, activePieceCellRef){
+const selectPiece = function(pieces, activePieceCellRef){
 
-	let updatedPieces = Object.assign({}, pieces);
+	let updatedPieces = unselectAllPieces(pieces);
 	let potentialMoves = [];
-
-	for (var piece in updatedPieces) {
-		if (updatedPieces.hasOwnProperty(piece)) {  
-    		updatedPieces[piece]['selected'] = false;
-		} 
-	}
 
 	updatedPieces[activePieceCellRef]['selected'] = true;
 	
@@ -122,7 +106,7 @@ var selectPiece = function(pieces, activePieceCellRef){
 
 	map(potentialMoves, function(potentialMove, i){
 
-		updatedPieces[potentialMove] = { type: 'landing', selected: false };
+		updatedPieces[potentialMove] = { cellRef: potentialMove, type: 'landing', selected: false };
 		
  	});
 
@@ -132,26 +116,30 @@ var selectPiece = function(pieces, activePieceCellRef){
 
 
 // Move a piece
-var moveActivePiece = function(pieces, landingPieceCellRef){
+const moveActivePiece = function(pieces, landingPieceCellRef){
 
-	let updatedPieces = Object.assign({}, pieces);
+	let selectedPiece = findWhere(pieces, { selected: true });
 
-	for (var piece in updatedPieces) {
-		if (updatedPieces.hasOwnProperty(piece)) { 
-			if(updatedPieces[piece]['selected'] === true){
-				updatedPieces[piece]['cellRef'] = landingPieceCellRef
-			} 
-    		updatedPieces[piece]['selected'] = false;
-		} 
+	if(selectedPiece){
+
+		let updatedPieces = omit(pieces, function(value, key, object) {
+  			return value.type === 'landing' || value.selected === true;
+		});
+
+		selectedPiece['selected'] = false;
+		updatedPieces[landingPieceCellRef] = selectedPiece;
+
+		return updatedPieces;
+
 	}
 
-	return updatedPieces;
+	return pieces;
 
 };
 
 
 // Move a piece
-var setActivePieces = function(pieces, activePlayer){
+const setActivePieces = function(pieces, activePlayer){
 
 	let updatedPieces = Object.assign({}, pieces);
 
