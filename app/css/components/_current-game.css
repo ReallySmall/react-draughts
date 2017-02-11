@@ -1,0 +1,20 @@
+@import '../variables.css';
+@import '../grid.css';
+
+.game-history {
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background-color: #274242;
+  border: 1px solid #3d6161;
+  li {
+    padding: 5px 0;
+    border-top: 1px solid $lightest-grey;
+    color: #d8dcdb;
+    &:first-child {
+      color: whitesmoke;
+      font-weight: bold;
+    }
+  }
+}
+

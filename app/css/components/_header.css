@@ -3,10 +3,10 @@
 
 .header-container {
   h1, h2 {
-    color: antiquewhite;
+    color: whitesmoke;
     margin: 20px 0 0 0;
   }
   p {
-  	color: antiquewhite;
+  	color: whitesmoke;
   }
 }

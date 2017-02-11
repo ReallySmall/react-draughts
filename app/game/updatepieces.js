@@ -1,80 +1,71 @@
+import { gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
 import { omit, findWhere, map, mapObject } from 'underscore';
 
 // Calculate the potential moves a piece could make
 const potentialMoves = function(pieces, activePieceCellRef){
 
 	const activePiece = pieces[activePieceCellRef];
-	const type = activePiece.type;
-	const player = activePiece.player;
-	const cellRef = activePiece.cellRef.split('_');
-	const directionOfPlay = player === 0 ? +1 : -1;
-	const reverseDirectionOfPlay = player === 0 ? -1 : +1;
-
 	let potentialMoves = [];
 
-	const forward = parseInt(cellRef[0]) + directionOfPlay;
-	const left = parseInt(cellRef[1]) - 1;
-	const right = parseInt(cellRef[1]) + 1;
+	if(activePiece){
 
-	potentialMoves.push(forward.toString() + '_' + left.toString());
-	potentialMoves.push(forward.toString() + '_' + right.toString());
+		const type = activePiece.type;
+		const player = activePiece.player;
+		const cellRef = gridRefStringToNumericalArray(activePiece.cellRef);
+		const directionOfPlay = player === 0 ? +1 : -1;
+		const reverseDirectionOfPlay = player === 0 ? -1 : +1;
 
-	if(type === 'king'){}
+		const forward = cellRef[0] + directionOfPlay;
+		const backward = cellRef[0] + reverseDirectionOfPlay;
+		const left = cellRef[1] - 1;
+		const right = cellRef[1] + 1;
+
+		potentialMoves.push(gridRefNumericalArrayToString([forward, left]));
+		potentialMoves.push(gridRefNumericalArrayToString([forward, right]));
+
+		if(type === 'king'){
+
+			potentialMoves.push(gridRefNumericalArrayToString([backward, left]));
+			potentialMoves.push(gridRefNumericalArrayToString([backward, right]));
+
+		}
+
+	}
 
 	return potentialMoves;
 
 };
 
 
-// Calculate the moves available to a piece
+// Calculate the actual moves available to a piece
 const availableMoves = function(pieces, activePieceCellRef){
 
 	const activePiece = pieces[activePieceCellRef];
-
-	let availableScoringMoves = [];
-	let allAvailableMoves = [];
-	let impossibleMoves = [];
-	let z;
+	
+	let availableMoves = {
+		moves: [],
+		canCapture: false
+	};
 
 	if(activePiece){
 
 		const player = activePiece.player;
-		const otherPlayer = player === 0 ? 1: 0;
 		
-		let availableSingleMoves = potentialMoves(pieces, activePieceCellRef);
+		map(potentialMoves(pieces, activePieceCellRef), function(potentialMove, j){
 
-		map(availableSingleMoves, function(availableSingleMove, j){
+			const piece = pieces[potentialMove];
 
-			const piece = pieces[availableSingleMove];
-
-			if(piece && piece.player > -1){ // can't land on another piece
-				impossibleMoves.push(availableSingleMove);
-				if(piece.player === otherPlayer){ // if square occupied by opposing piece
-					//availableScoringMoves.push(potentialMoves(pieces, piece)) // check if square behind it is empty
-				}
+			if(!piece){ // is square empty?
+				availableMoves.moves.push(potentialMove);
+			} else if(piece && piece.player !== player){
+				// TODO - taking opposing piece if space beyond is free
 			}
 
 		});
-
-		map(availableScoringMoves, function(availableScoringMove, k){
-
-			const piece = pieces[availableScoringMove];
-
-			if(piece && piece.player > -1){ // can't land on another piece
-				impossibleMoves.push(availableScoringMove);
-			}
-
-		});
-
-		allAvailableMoves = [...availableSingleMoves, ...availableScoringMoves];
-
-		while((z = impossibleMoves.pop()) != null){ // remove all the impossible moves from the list of potential moves
-			allAvailableMoves.splice(z, 1);
-		}
 
 	}
 
-	return allAvailableMoves;
+	return availableMoves;
 
 };
 
@@ -99,14 +90,22 @@ const selectPiece = function(pieces, activePieceCellRef){
 
 	let updatedPieces = unselectAllPieces(pieces);
 	let potentialMoves = [];
+	const player = updatedPieces[activePieceCellRef]['player'];
 
 	updatedPieces[activePieceCellRef]['selected'] = true;
 	
-	potentialMoves = availableMoves(updatedPieces, activePieceCellRef);
+	potentialMoves = availableMoves(updatedPieces, activePieceCellRef).moves;
 
 	map(potentialMoves, function(potentialMove, i){
 
-		updatedPieces[potentialMove] = { cellRef: potentialMove, type: 'landing', selected: false };
+		updatedPieces[potentialMove] = { 
+			cellRef: potentialMove, 
+        	player: player,
+        	colour: 'landing', 
+			type: 'landing', 
+			active: false, 
+			selected: false 
+		};
 		
  	});
 
@@ -115,8 +114,8 @@ const selectPiece = function(pieces, activePieceCellRef){
 };
 
 
-// Move a piece
-const moveActivePiece = function(pieces, landingPieceCellRef){
+// Move an active piece to a new square
+const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
 
 	let selectedPiece = findWhere(pieces, { selected: true });
 
@@ -127,6 +126,8 @@ const moveActivePiece = function(pieces, landingPieceCellRef){
 		});
 
 		selectedPiece['selected'] = false;
+		selectedPiece['cellRef'] = landingPieceCellRef;
+
 		updatedPieces[landingPieceCellRef] = selectedPiece;
 
 		return updatedPieces;
@@ -138,16 +139,13 @@ const moveActivePiece = function(pieces, landingPieceCellRef){
 };
 
 
-// Move a piece
+// Set pieces for the current player which have available moves as active
 const setActivePieces = function(pieces, activePlayer){
 
-	let updatedPieces = Object.assign({}, pieces);
-
-	for (var piece in updatedPieces) {
-		if (updatedPieces.hasOwnProperty(piece)) { 
-			updatedPieces[piece]['active'] = (updatedPieces[piece]['player'] === activePlayer && availableMoves(pieces, updatedPieces[piece]['cellRef']).length) ? true : false;
-		} 
-	}
+	let updatedPieces = mapObject(pieces, function (piece) { 
+		piece.active = piece.player === activePlayer && availableMoves(pieces, piece.cellRef).moves.length ? true : false;;
+		return piece;
+	});
 
 	return updatedPieces;
 

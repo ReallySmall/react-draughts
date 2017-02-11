@@ -98,6 +98,10 @@
 		top: -5%;
 		left: -5%;
 	}
+	.cell-ref {
+		font-size: 18px;
+		color: whitesmoke;
+	}
 }
 
 @-webkit-keyframes rotation {

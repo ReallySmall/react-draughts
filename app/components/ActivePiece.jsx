@@ -8,7 +8,7 @@ export default class ActivePiece extends Component {
 
   render(){
 
-  	const { colour, cellRef, player, type, selected, clearPieceSelections, setPieceSelection } = this.props;
+  	const { colour, cellRef, player, type, selected, setPieceSelection } = this.props;
   	const accessibleInfo = <span className={cx('visually-hidden')}>Player {player} {type}</span>;
     const selectedClass = selected === true ? 'selected' : '';
 

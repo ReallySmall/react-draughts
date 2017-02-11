@@ -3,7 +3,9 @@
 
 .side-bar {
   padding: 20px;
-  background: whitesmoke;
+  background: darkslategray;
+  color: whitesmoke;
   border-radius: 4px;
+  box-shadow: 0.375rem 0.375rem 0.3125rem 0px rgba(0,0,0,0.65);
 }
 

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { map } from 'underscore';
 import classNames from 'classnames/bind';
-import styles from 'css/components/_loading';
+import styles from 'css/components/_current-game';
 
 const cx = classNames.bind(styles);
 
@@ -13,18 +13,23 @@ export default class CurrentGame extends Component {
 
     return (
     	<aside>
-            <h2>Current Game</h2>
-            <p>{players[activePlayer]} - it's your turn</p>
-            <div className={cx('scroll-wrapper')}>
-	            <ul className={cx('plain')}>
-	            	{map(history, function(gameEvent, i){
-	            		return (
-	            			<li key={i}>{gameEvent}</li>
-	            		)
-	            	})}
-	            </ul>
-            </div>
-        </aside>
+        <h2>Current Game</h2>
+        <div className={cx('scroll-wrapper')}>
+          <ul className={cx('game-history')}>
+          	{map(history, function(gameEvent, i){
+              
+              const { message, player } = gameEvent;
+          		
+              return (
+          			<li key={i} className={cx(player)}>
+                  {message}
+                </li>
+          		)
+
+          	})}
+          </ul>
+        </div>
+      </aside>
     );
   }
 

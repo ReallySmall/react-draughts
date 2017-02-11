@@ -14,12 +14,11 @@ import chromecon from 'file!images/android-chrome-192x192.png';
 import applecon from 'file!images/apple-touch-icon.png';
 import mscon from 'file!images/mstile-150x150.png';
 import favicon from 'file!images/favicon.ico';
-import ogicon from 'file!images/stackduino_boards.jpg';
 
-const defaultMetaDesc = 'An Arduino compatible focus stacking controller for macro photography';
+const defaultMetaDesc = 'Draughts in React and Redux';
 
 const config = {
-  titleTemplate: 'Stackduino: Arduino Focus Stacking | %s',
+  titleTemplate: 'React Draughts',
   link: [
     // Add to homescreen for Chrome on Android
     { 'rel': 'icon', 'href': favicon },
@@ -45,14 +44,13 @@ const config = {
     // Add to homescreen for Safari on IOS
     { 'name': 'apple-mobile-web-app-capable', 'content': 'yes' },
     { 'name': 'apple-mobile-web-app-status-bar-style', 'content': 'black' },
-    { 'name': 'apple-mobile-web-app-title', 'content': 'Stackduino' },
+    { 'name': 'apple-mobile-web-app-title', 'content': 'React Draughts' },
     // Tile icon for Win8 (144x144 + tile color)
     { 'name': 'msapplication-TileImage', 'content': mscon },
     { 'name': 'msapplication-TileColor', 'content': '#3372DF' },
     // og tags
-    { 'name': 'og:site_name', 'content': 'Stackduino' },
-    { 'name': 'og:description', 'content': defaultMetaDesc },
-    { 'name': 'og:image:secure_url', 'content': ogicon }
+    { 'name': 'og:site_name', 'content': 'React Draughts' },
+    { 'name': 'og:description', 'content': defaultMetaDesc }
   ]
 };
 

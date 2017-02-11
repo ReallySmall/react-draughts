@@ -1,3 +1,4 @@
+import { createGameHistoryEntry, toFriendlyGridRef, gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
 import { createGrid, createPieces } from 'game/setuppieces';
 import { availableMoves, unselectAllPieces, selectPiece, setActivePieces, moveActivePiece } from 'game/updatepieces';
 import {
@@ -18,7 +19,7 @@ export default function game(state = {
   grid: createGrid(defaultGridSize),
   gridSize: 8,
   startingPieceCount: 12,
-  activePlayer: null,
+  activePlayer: 0,
   players: ['Player 1', 'Player 2'],
   started: false,
   history: [],
@@ -37,10 +38,15 @@ export default function game(state = {
       });
 
     case START_GAME:
+
+      let startGameMessage = [createGameHistoryEntry('New game started'), ...state.history];
+
+      startGameMessage = [createGameHistoryEntry(state.players[state.activePlayer] + ' - it\'s your turn', state.activePlayer), ...startGameMessage]
+
       return Object.assign({}, state, {
         started: true,
         activePlayer: 0,
-        history: ['New game started', ...state.history],
+        history: startGameMessage,
         pieces: setActivePieces(state.pieces, 0)
       });
 
@@ -62,12 +68,15 @@ export default function game(state = {
     case MOVE_ACTIVE_PIECE:
 
       let updatedPieces = moveActivePiece(state.pieces, action.cellRef); // move the piece
-      let nextPlayer = state.activePlayer === 0 ? 1 : 0; // work out whether current player's turn is over
+      let nextPlayer = state.activePlayer === 0 ? 1 : 0; // TODO work out whether current player's turn is over
+      let pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer] + ' moved to ' + toFriendlyGridRef(action.cellRef), state.activePlayer), ...state.history];
+
       updatedPieces = setActivePieces(updatedPieces, nextPlayer); // set the active pieces for the next move
+      pieceMoveMessage = [createGameHistoryEntry(state.players[nextPlayer]  + ' - it\'s your turn', nextPlayer), ...pieceMoveMessage];      
 
       return Object.assign({}, state, {
         pieces: updatedPieces,
-        history: ['Player ' + state.players[state.activePlayer] + ' moved a piece', ...state.history],
+        history: pieceMoveMessage,
         activePlayer: nextPlayer
       });
 

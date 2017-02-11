@@ -36,8 +36,6 @@ export function setPieceSelection(cellRef) {
 // Move the active piece to the clicked position
 export function moveActivePieceToHere(cellRef) {
 
-	console.log(cellRef);
-
 	return {
 		type: types.MOVE_ACTIVE_PIECE,
 		cellRef: cellRef
