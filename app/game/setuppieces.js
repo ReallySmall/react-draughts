@@ -1,3 +1,5 @@
+import { gridRefNumericalArrayToString } from 'game/helpers';
+
 var createGrid = function(gridSize){
 
 	if(gridSize){
@@ -12,7 +14,7 @@ var createGrid = function(gridSize){
 	      for(let j = 0; j < gridSize; j++){
 
 	        const colId = j;
-	        const cellRef = rowId.toString() + '_' + colId.toString(); // ref to this cell in the grid
+	        const cellRef = gridRefNumericalArrayToString([rowId, colId]); // ref to this cell in the grid
 	        const modifier = rowId % 2 === 0 ? 0 : 1;
 	        const inGame = (colId + modifier) % 2 === 0 ? true : false;
 	        const style = {
@@ -53,19 +55,20 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 	      for(let j = 0; j < gridSize; j++){
 
 	        const colId = j;
-	        const cellRef = rowId.toString() + '_' + colId.toString(); // ref to this cell in the grid
+	        const cellRef = gridRefNumericalArrayToString([rowId, colId]); // ref to this cell in the grid
 	        const modifier = rowId % 2 === 0 ? 0 : 1;
 	        const inGame = (colId + modifier) % 2 === 0 ? true : false;
 
 	        if(inGame && playerOnePiecesDeployed < piecesPerPlayer){
 
 		        let piece = { 
-		        	cellRef: cellRef, 
+		        	cellRef: cellRef,
 		        	player: 0,
 		        	colour: 'player1', 
 		        	type: 'pawn', 
 		        	active: false, 
-		        	selected: false 
+		        	selected: false,
+		        	captures: []
 		        };
 
     	        playerOnePiecesDeployed++;
@@ -84,7 +87,7 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 	      	for(let l = gridSize - 1; l >= 0; l--){
 
 	        	const colId = l;
-	        	const cellRef = rowId.toString() + '_' + colId.toString(); // ref to this cell in the grid
+	        	const cellRef = gridRefNumericalArrayToString([rowId, colId]); // ref to this cell in the grid
 	        	const modifier = rowId % 2 === 0 ? 0 : 1;
 	        	const inGame = (colId + modifier) % 2 === 0 ? true : false;
 
@@ -96,7 +99,8 @@ var createPieces = function(gridSize, piecesPerPlayer) {
 			        	colour: 'player2', 
 			        	type: 'pawn', 
 			        	active: false, 
-			        	selected: false 
+			        	selected: false,
+			        	captures: [] 
 			        };
 
     	        	playerTwoPiecesDeployed++;
