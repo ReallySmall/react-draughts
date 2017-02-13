@@ -21,7 +21,7 @@ export default class CurrentGame extends Component {
               const { message, player } = gameEvent;
           		
               return (
-          			<li key={i} className={cx(player)}>
+          			<li key={i}>
                   {message}
                 </li>
           		)

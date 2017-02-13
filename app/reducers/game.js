@@ -18,9 +18,12 @@ const defaultStartingPieceCount = 12;
 export default function game(state = {
   grid: createGrid(defaultGridSize),
   gridSize: 8,
-  startingPieceCount: 12,
+  startingPieceCount: defaultStartingPieceCount,
   activePlayer: 0,
-  players: ['Player 1', 'Player 2'],
+  players: [
+    { name: 'Player 1', pieces: defaultStartingPieceCount }, 
+    { name: 'Player 2', pieces: defaultStartingPieceCount } 
+  ],
   started: false,
   history: [],
   moves: 0,
@@ -32,6 +35,10 @@ export default function game(state = {
       return Object.assign({}, state, {
         grid: createGrid(action.req.data.gridSize),
         gridSize: action.req.data.gridSize,
+        players: [
+          { name: 'Player 1', pieces: action.req.data.initialPieces }, 
+          { name: 'Player 2', pieces: action.req.data.initialPieces } 
+        ],
         startingPieceCount: action.req.data.initialPieces,
         rules: action.req.data.rules,
         pieces: createPieces(action.req.data.gridSize, action.req.data.initialPieces)
@@ -41,7 +48,7 @@ export default function game(state = {
 
       let startGameMessage = [createGameHistoryEntry('New game started'), ...state.history];
 
-      startGameMessage = [createGameHistoryEntry(state.players[state.activePlayer] + ' - it\'s your turn', state.activePlayer), ...startGameMessage]
+      startGameMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' - it\'s your turn', state.activePlayer), ...startGameMessage]
 
       return Object.assign({}, state, {
         started: true,
@@ -69,10 +76,10 @@ export default function game(state = {
 
       let updatedPieces = moveActivePiece(state.pieces, action.cellRef); // move the piece
       let nextPlayer = state.activePlayer === 0 ? 1 : 0; // TODO work out whether current player's turn is over
-      let pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer] + ' moved to ' + toFriendlyGridRef(action.cellRef), state.activePlayer), ...state.history];
+      let pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' moved to ' + toFriendlyGridRef(action.cellRef), state.activePlayer), ...state.history];
 
       updatedPieces = setActivePieces(updatedPieces, nextPlayer); // set the active pieces for the next move
-      pieceMoveMessage = [createGameHistoryEntry(state.players[nextPlayer]  + ' - it\'s your turn', nextPlayer), ...pieceMoveMessage];      
+      pieceMoveMessage = [createGameHistoryEntry(state.players[nextPlayer]['name'] + ' - it\'s your turn', nextPlayer), ...pieceMoveMessage];      
 
       return Object.assign({}, state, {
         pieces: updatedPieces,

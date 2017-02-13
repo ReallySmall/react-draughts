@@ -2,7 +2,7 @@
 @import '../grid.css';
 
 .board-wrapper {
-	overflow: hidden;
+	overflow: visible;
 	margin: 0 0 15px 0;
 }
 

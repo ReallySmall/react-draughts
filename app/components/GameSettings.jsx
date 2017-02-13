@@ -31,11 +31,11 @@ export default class GameSettings extends Component {
                 <fieldset>
                     <div className={cx('form-control')}>
                         <label htmlFor="player-one-name">Player One name</label>
-                        <input id="player-one-name" type="text" maxLength="15" value={players[0]} />
+                        <input id="player-one-name" type="text" maxLength="15" value={players[0].name} />
                     </div>
                     <div className={cx('form-control')}>
                         <label htmlFor="player-two-name">Player Two name</label>
-                        <input id="player-two-name" type="text" maxLength="15" value={players[1]} />
+                        <input id="player-two-name" type="text" maxLength="15" value={players[1].name} />
                     </div>
                 </fieldset>
                 <button onClick={
