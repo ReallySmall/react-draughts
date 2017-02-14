@@ -98,11 +98,13 @@ const availableMoves = function(pieces, activePieceCellRef){
 // Unselect all pieces
 const unselectAllPieces = function(pieces){
 
-	let updatedPieces = mapObject(pieces, function (piece) { 
-		piece.selected = false;
-		if(piece.type !== 'landing'){
+	let updatedPieces = mapObject(pieces, function (piece) {
+
+		if(piece && piece.type !== 'landing'){
+			piece.selected = false;
 			return piece;
-		} 
+		}
+
 	});
 
 	return updatedPieces;
@@ -142,19 +144,21 @@ const selectPiece = function(pieces, activePieceCellRef){
 
 
 // Move an active piece to a new square
-const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
-
-	console.log(pieces[landingPieceCellRef]);
+const moveActivePiece = function(pieces, landingPieceCellRef){
 
 	const capturedPiece = pieces[landingPieceCellRef].captures;
+
 	let selectedPiece = findWhere(pieces, { selected: true }); // find and cache the active piece data
+	let turnComplete = true;
 
 	if(selectedPiece){
 
 		let updatedPieces = omit(pieces, function(piece) { // remove the active, captured and landing pieces
 
-			const { type, selected, cellRef } = piece;
-  			return type === 'landing' || selected === true || cellRef === capturedPiece;
+			if(piece){
+				const { type, selected, cellRef } = piece;
+	  			return type === 'landing' || selected === true || cellRef === capturedPiece;
+  			}
 
 		});
 
@@ -163,7 +167,26 @@ const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
 
 		updatedPieces[landingPieceCellRef] = selectedPiece; // set the active piece from cached object
 
-		return updatedPieces;
+		if(capturedPiece){
+
+			map(availableMoves(updatedPieces, landingPieceCellRef), function(potentialMove, i){
+
+				if(potentialMove.captures !== null){
+					updatedPieces[landingPieceCellRef]['active'] = true;
+					updatedPieces[landingPieceCellRef]['selected'] = true;
+					updatedPieces = selectPiece(updatedPieces, landingPieceCellRef);
+					turnComplete = false;
+				}
+				
+		 	});
+		 	
+		}
+
+		return {
+			captures: capturedPiece,
+			pieces: updatedPieces,
+			turnComplete: turnComplete
+		}
 
 	}
 
@@ -175,11 +198,13 @@ const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
 // Set pieces for the current player which have available moves as active
 const setActivePieces = function(pieces, activePlayer){
 
+	let moves = [];
 	let updatedPieces = mapObject(pieces, function (piece) {
 
-		const moves = availableMoves(pieces, piece.cellRef);
-
-		piece.active = piece.player === activePlayer && moves.length ? true : false;
+		if(piece){
+			moves = availableMoves(pieces, piece.cellRef);
+			piece.active = piece.player === activePlayer && moves.length ? true : false;
+		}
 
 		return piece;
 

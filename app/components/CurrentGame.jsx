@@ -19,9 +19,10 @@ export default class CurrentGame extends Component {
           	{map(history, function(gameEvent, i){
               
               const { message, player } = gameEvent;
-          		
+              const itemClass = player + 1 || '';
+
               return (
-          			<li key={i}>
+          			<li key={i} className={cx('player' + itemClass)}>
                   {message}
                 </li>
           		)
