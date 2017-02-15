@@ -23,7 +23,7 @@ export default class CurrentGame extends Component {
 
               return (
           			<li key={i} className={cx('player' + itemClass)}>
-                  {message}
+                  <span>{message}</span>
                 </li>
           		)
 

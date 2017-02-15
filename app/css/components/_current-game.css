@@ -8,12 +8,38 @@
   background-color: #274242;
   border: 1px solid #3d6161;
   li {
+    display: table;
     padding: 5px 0;
     border-top: 1px solid $lightest-grey;
     color: #d8dcdb;
+    span {
+      line-height: 18px;
+      display: table-cell;
+      width: 100%;
+    }
     &:first-child {
       color: whitesmoke;
       font-weight: bold;
+    }
+    &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        height: 1em;
+        width: 1em;
+        border-radius: 0.5em;
+        background: transparent;
+        margin-right: 10px;
+    }
+    &.player1 {
+      &:before {
+        background-color: #901a1a;
+      }
+    }
+    &.player2 {
+      &:before {
+        background-color: whitesmoke;
+      }
     }
   }
 }

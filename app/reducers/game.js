@@ -1,6 +1,8 @@
 import { createGameHistoryEntry, toFriendlyGridRef, gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
 import { createGrid, createPieces } from 'game/setuppieces';
-import { availableMoves, unselectAllPieces, selectPiece, setActivePieces, moveActivePiece } from 'game/updatepieces';
+import { availableMoves, moveActivePiece } from 'game/movepieces';
+import { unselectAllPieces, selectPiece, setActivePieces } from 'game/selectpieces';
+
 import {
   CHANGE_GAME_TYPE_SUCCESS,
   SET_ACTIVE_PLAYER,
@@ -56,7 +58,7 @@ export default function game(state = {
         started: true,
         activePlayer: 0,
         history: startGameMessage,
-        pieces: setActivePieces(state.pieces, 0)
+        pieces: setActivePieces(state.pieces, 0, state.gridSize)
       });
 
     case CREATE_PIECE_COLLECTION:
@@ -66,7 +68,7 @@ export default function game(state = {
 
     case SET_PIECE_SELECTION:
       return Object.assign({}, state, {
-        pieces: selectPiece(state.pieces, action.cellRef)
+        pieces: selectPiece(state.pieces, action.cellRef, state.gridSize)
       });
 
     case CLEAR_PIECE_SELECTIONS:
@@ -76,7 +78,7 @@ export default function game(state = {
 
     case MOVE_ACTIVE_PIECE:
 
-      const move = moveActivePiece(state.pieces, action.cellRef);
+      const move = moveActivePiece(state.pieces, action.cellRef, state.gridSize);
       const { captures, pieces, turnComplete } = move;
 
       let updatedPieces = pieces; // move the piece
@@ -91,7 +93,7 @@ export default function game(state = {
 
       if(turnComplete){
         nextPlayer = state.activePlayer === 0 ? 1 : 0;
-        updatedPieces = setActivePieces(updatedPieces, nextPlayer); // set the active pieces for the next move
+        updatedPieces = setActivePieces(updatedPieces, nextPlayer, state.gridSize); // set the active pieces for the next move
         pieceMoveMessage = [createGameHistoryEntry(state.players[nextPlayer]['name'] + ' - it\'s your move', nextPlayer), ...pieceMoveMessage];
       } else {
         nextPlayer = state.activePlayer;
