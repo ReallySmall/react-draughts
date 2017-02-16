@@ -1,6 +1,6 @@
 import { gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
 import { unselectAllPieces, selectPiece, setActivePieces } from 'game/selectpieces';
-import { omit, findWhere, map, mapObject } from 'underscore';
+import { omit, filter, findWhere, map, mapObject } from 'underscore';
 
 // 
 const isInGrid = (gridIndex, gridSize) => {
@@ -62,6 +62,7 @@ const potentialMoves = (pieces, activePieceCellRef, gridSize, invert = false) =>
 const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 
 	const activePiece = pieces[activePieceCellRef]; // the piece passed in
+	let hasCaptureMoves = false; // track whether there are capturing moves the player must make
 	
 	let availableMoves = []; // array to return
 
@@ -100,6 +101,8 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 								captures: piece.cellRef
 							});
 
+							hasCaptureMoves = true;
+
 						}
 
 					}
@@ -109,6 +112,12 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 
 		});
 
+	}
+
+	if(hasCaptureMoves){ // if piece has any capture moves available, remove all non capturing moves
+		availableMoves = filter(availableMoves, (availableMove) => { 
+			return (availableMove.captures !== null && availableMove.captures.length); 
+		});
 	}
 
 	return availableMoves;
