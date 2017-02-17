@@ -58,7 +58,7 @@ export default function game(state = {
         started: true,
         activePlayer: 0,
         history: startGameMessage,
-        pieces: setActivePieces(state.pieces, 0, state.gridSize)
+        pieces: setActivePieces(state.pieces, 0, state.gridSize).pieces
       });
 
     case CREATE_PIECE_COLLECTION:
@@ -78,32 +78,52 @@ export default function game(state = {
 
     case MOVE_ACTIVE_PIECE:
 
-      const move = moveActivePiece(state.pieces, action.cellRef, state.gridSize);
-      const { captures, pieces, turnComplete } = move;
+      const move = moveActivePiece(state.pieces, action.cellRef, state.gridSize); // move the piece
+      const { captures, pieces, turnComplete } = move; // key data from the move
+      const otherPlayer = state.activePlayer === 0 ? 1 : 0; // set active player to other player
 
-      let updatedPieces = pieces; // move the piece
+      let updatedPieces = pieces; // pieces to assign back to state
+      let playerData = state.players;
       let pieceMoveMessage;
-      let nextPlayer;
+      let nextPlayer = otherPlayer;
 
-      if(captures){
+      if(captures){ // if the move captured a piece
+
+        playerData[otherPlayer].pieces = playerData[otherPlayer].pieces - 1;
         pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' moved to ' + toFriendlyGridRef(action.cellRef) + ' and captured a piece', state.activePlayer), ...state.history];
-      } else {
+      
+      } else { // if the move didn't capture a piece
+
         pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' moved to ' + toFriendlyGridRef(action.cellRef), state.activePlayer), ...state.history];
+      
       }
 
-      if(turnComplete){
-        nextPlayer = state.activePlayer === 0 ? 1 : 0;
-        updatedPieces = setActivePieces(updatedPieces, nextPlayer, state.gridSize); // set the active pieces for the next move
-        pieceMoveMessage = [createGameHistoryEntry(state.players[nextPlayer]['name'] + ' - it\'s your move', nextPlayer), ...pieceMoveMessage];
+      if(turnComplete){ // if there are no subsequent mandatory captures
+
+        const activePieces = setActivePieces(updatedPieces, nextPlayer, state.gridSize);
+
+        updatedPieces = activePieces.pieces; // set the active pieces for the next move
+        pieceMoveMessage = [createGameHistoryEntry(state.players[otherPlayer]['name'] + ' - it\'s your move', otherPlayer), ...pieceMoveMessage];
+
+        if(activePieces.captures === true){
+
+          pieceMoveMessage = [createGameHistoryEntry(state.players[otherPlayer]['name'] + ' - you must capture a piece', otherPlayer), ...pieceMoveMessage];
+        
+        }
+
       } else {
+
         nextPlayer = state.activePlayer;
-        pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' - you must make another move', nextPlayer), ...pieceMoveMessage];
+        pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' - you must make another move', state.activePlayer), ...pieceMoveMessage];
+      
       }
 
       return Object.assign({}, state, {
         pieces: updatedPieces,
+        players: playerData,
         history: pieceMoveMessage,
-        activePlayer: nextPlayer
+        activePlayer: nextPlayer,
+        moves: state.moves + 1
       });
 
     default:

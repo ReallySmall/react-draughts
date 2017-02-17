@@ -1,6 +1,6 @@
 import { gridRefNumericalArrayToString } from 'game/helpers';
 
-var createGrid = function(gridSize){
+const createGrid = (gridSize) => {
 
 	if(gridSize){
 
@@ -40,7 +40,7 @@ var createGrid = function(gridSize){
 
 };
 
-var createPieces = function(gridSize, piecesPerPlayer) {
+const createPieces = (gridSize, piecesPerPlayer) => {
 	
 	if(gridSize && piecesPerPlayer){
 

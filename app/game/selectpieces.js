@@ -1,6 +1,6 @@
 import { gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
 import { potentialMoves, availableMoves, moveActivePiece } from 'game/movepieces';
-import { omit, findWhere, map, mapObject } from 'underscore';
+import { omit, findWhere, map, mapObject, some } from 'underscore';
 
 // Unselect all pieces
 const unselectAllPieces = (pieces) => {
@@ -53,19 +53,42 @@ const selectPiece = (pieces, activePieceCellRef, gridSize) => {
 // Set pieces for the current player which have available moves as active
 const setActivePieces = (pieces, activePlayer, gridSize) => {
 
-	let moves = [];
-	let updatedPieces = mapObject(pieces, (piece) => {
+	let canCapture = false;
+
+	let updatedPieces = mapObject(pieces, (piece) => { // create new pieces object
 
 		if(piece){
-			moves = availableMoves(pieces, piece.cellRef, gridSize);
-			piece.active = piece.player === activePlayer && moves.length ? true : false;
+			const moves = availableMoves(pieces, piece.cellRef, gridSize); // get available moves for each piece
+			piece.active = piece.player === activePlayer && moves.length ? true : false; // should piece be active?
+			if(some(moves, (move) => { return move.captures !== null })){ // if any piece can capture an enemy piece
+				canCapture = true; //... flag it
+			}
 		}
 
 		return piece;
 
 	});
 
-	return updatedPieces;
+	if(canCapture){ // if captures are possible
+
+		updatedPieces = mapObject(updatedPieces, (piece) => { // recreate the pieces object
+
+			if(piece){
+				const moves = availableMoves(pieces, piece.cellRef, gridSize);
+				// but this time only make pieces active that can capture
+				piece.active = piece.player === activePlayer && moves.length && some(moves, (move) => { return move.captures !== null }) ? true : false;
+			}
+
+			return piece;
+
+		});
+
+	}
+
+	return {
+		captures: canCapture,
+		pieces: updatedPieces
+	}
 
 };
 

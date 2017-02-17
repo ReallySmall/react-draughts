@@ -1,7 +1,7 @@
 import { omit, findWhere, map, mapObject } from 'underscore';
 
 // convert a grid ref string to a numerical array
-const gridRefStringToNumericalArray = function(cellRef){
+const gridRefStringToNumericalArray = (cellRef) => {
 
 	const cellRefArray = cellRef.split('_');
 
@@ -14,7 +14,7 @@ const gridRefStringToNumericalArray = function(cellRef){
 }
 
 // convert a grid ref string to a numerical array
-const gridRefNumericalArrayToString = function(cellRef){
+const gridRefNumericalArrayToString = (cellRef) => {
 
 	const cellRefString = cellRef[0].toString() + '_' + cellRef[1].toString();
 
@@ -23,7 +23,7 @@ const gridRefNumericalArrayToString = function(cellRef){
 }
 
 // return a friendly alphanumeric grid reference for front end updates
-const toFriendlyGridRef = function(cellRef){
+const toFriendlyGridRef = (cellRef) => {
 
 	const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 	const cellRefArray = gridRefStringToNumericalArray(cellRef);
@@ -35,7 +35,7 @@ const toFriendlyGridRef = function(cellRef){
 };
 
 // return a game history entry
-const createGameHistoryEntry = function(message, player){
+const createGameHistoryEntry = (message, player) => {
 
 	const gameHistoryEntry = {
 		message: message,
