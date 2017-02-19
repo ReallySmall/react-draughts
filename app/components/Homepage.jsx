@@ -21,7 +21,6 @@ export default class Homepage extends Component {
         <div className={cx('col-md-12')}>
           <h1>React Draughts</h1>
           <p>Universal React with Redux</p>
-          <p><strong>WORK IN PROGRESS :)</strong></p>
         </div>
         {React.cloneElement(this.props.children, {...this.props})}
       </div>

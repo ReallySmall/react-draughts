@@ -1,6 +1,23 @@
 import { omit, findWhere, map, mapObject } from 'underscore';
 
 // convert a grid ref string to a numerical array
+const canCoronate = (cellRef, player, gridSize) => {
+
+	const cellRefArray = gridRefStringToNumericalArray(cellRef);
+
+	if(player === 0 && cellRefArray[0] + 1 === gridSize){
+		return true;
+	}
+
+	if(player === 1 && cellRefArray[0] === 0){
+		return true;
+	}
+
+	return false;
+
+}
+
+// convert a grid ref string to a numerical array
 const gridRefStringToNumericalArray = (cellRef) => {
 
 	const cellRefArray = cellRef.split('_');
@@ -46,4 +63,4 @@ const createGameHistoryEntry = (message, player) => {
 
 };
 
-export { createGameHistoryEntry, gridRefStringToNumericalArray, gridRefNumericalArrayToString, toFriendlyGridRef };
+export { canCoronate, createGameHistoryEntry, gridRefStringToNumericalArray, gridRefNumericalArrayToString, toFriendlyGridRef };

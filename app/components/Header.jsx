@@ -21,7 +21,7 @@ export default class Header extends Component {
       <div className={cx('container', 'header-container')}>
         <div className={cx('col-md-12')}>
           <h1>React Draughts</h1>
-          <p><a href="https://github.com/ReallySmall/react-draughts">github.com/ReallySmall/react-draughts</a>. In React and Redux. In progress - some parts working, others ...not so much</p>
+          <p><a href="https://github.com/ReallySmall/react-draughts">github.com/ReallySmall/react-draughts</a> (work in progress)</p>
         </div>
       </div>
     );

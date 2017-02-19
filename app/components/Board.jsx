@@ -41,7 +41,7 @@ export default class Board extends Component {
 
 
     return (
-      <div className={cx('col-md-9', 'board-wrapper', 'clearfix')}>
+      <div className={cx('col-lg-9', 'board-wrapper')}>
           <section>
             <div className={cx('board')}>
               {board}

@@ -79,17 +79,16 @@ export default function game(state = {
     case MOVE_ACTIVE_PIECE:
 
       const move = moveActivePiece(state.pieces, action.cellRef, state.gridSize); // move the piece
-      const { captures, pieces, turnComplete } = move; // key data from the move
-      const otherPlayer = state.activePlayer === 0 ? 1 : 0; // set active player to other player
 
-      let updatedPieces = pieces; // pieces to assign back to state
+      let updatedPieces = move.pieces; // pieces to assign back to state
       let playerData = state.players;
       let pieceMoveMessage;
-      let nextPlayer = otherPlayer;
+      let opponent = state.activePlayer === 0 ? 1 : 0; // set active player to other player;
+      let nextPlayer = opponent;
 
-      if(captures){ // if the move captured a piece
+      if(move.captures){ // if the move captured a piece
 
-        playerData[otherPlayer].pieces = playerData[otherPlayer].pieces - 1;
+        playerData[opponent].pieces = playerData[opponent].pieces - 1;
         pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' moved to ' + toFriendlyGridRef(action.cellRef) + ' and captured a piece', state.activePlayer), ...state.history];
       
       } else { // if the move didn't capture a piece
@@ -98,17 +97,31 @@ export default function game(state = {
       
       }
 
-      if(turnComplete){ // if there are no subsequent mandatory captures
+      if(move.coronated){
 
-        const activePieces = setActivePieces(updatedPieces, nextPlayer, state.gridSize);
+        pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' crowned a piece!', state.activePlayer), ...pieceMoveMessage];
 
-        updatedPieces = activePieces.pieces; // set the active pieces for the next move
-        pieceMoveMessage = [createGameHistoryEntry(state.players[otherPlayer]['name'] + ' - it\'s your move', otherPlayer), ...pieceMoveMessage];
+      }
 
-        if(activePieces.captures === true){
+      if(move.turnComplete){ // if there are no subsequent mandatory captures
 
-          pieceMoveMessage = [createGameHistoryEntry(state.players[otherPlayer]['name'] + ' - you must capture a piece', otherPlayer), ...pieceMoveMessage];
-        
+        if(playerData[0].pieces.length || playerData[1].pieces.length){
+
+          pieceMoveMessage = [createGameHistoryEntry('Game complete'), ...pieceMoveMessage];
+
+        } else {
+
+          pieceMoveMessage = [createGameHistoryEntry(state.players[opponent]['name'] + ' - it\'s your move', opponent), ...pieceMoveMessage];
+
+          const activePieces = setActivePieces(updatedPieces, opponent, state.gridSize);
+          updatedPieces = activePieces.pieces; // set the active pieces for the next move
+
+          if(activePieces.captures === true){
+
+            pieceMoveMessage = [createGameHistoryEntry(state.players[opponent]['name'] + ' - you must capture a piece', opponent), ...pieceMoveMessage];
+          
+          }
+
         }
 
       } else {

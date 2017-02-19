@@ -57,12 +57,15 @@ const setActivePieces = (pieces, activePlayer, gridSize) => {
 
 	let updatedPieces = mapObject(pieces, (piece) => { // create new pieces object
 
-		if(piece){
-			const moves = availableMoves(pieces, piece.cellRef, gridSize); // get available moves for each piece
-			piece.active = piece.player === activePlayer && moves.length ? true : false; // should piece be active?
-			if(some(moves, (move) => { return move.captures !== null })){ // if any piece can capture an enemy piece
+		const moves = availableMoves(pieces, piece.cellRef, gridSize); // get available moves for each piece
+
+		if(piece && piece.player === activePlayer){
+			piece.active = moves.length ? true : false; // should piece be active?
+			if(some(moves, (move) => { return move.captures })){ // if piece can capture an enemy piece
 				canCapture = true; //... flag it
 			}
+		} else {
+			piece.active = false;
 		}
 
 		return piece;
@@ -73,10 +76,11 @@ const setActivePieces = (pieces, activePlayer, gridSize) => {
 
 		updatedPieces = mapObject(updatedPieces, (piece) => { // recreate the pieces object
 
-			if(piece){
-				const moves = availableMoves(pieces, piece.cellRef, gridSize);
+			const moves = availableMoves(pieces, piece.cellRef, gridSize);
+
+			if(piece && piece.player === activePlayer){
 				// but this time only make pieces active that can capture
-				piece.active = piece.player === activePlayer && moves.length && some(moves, (move) => { return move.captures !== null }) ? true : false;
+				piece.active = moves.length && some(moves, (move) => { return move.captures }) ? true : false;
 			}
 
 			return piece;

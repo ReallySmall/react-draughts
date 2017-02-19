@@ -1,4 +1,4 @@
-import { gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
+import { canCoronate, gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
 import { unselectAllPieces, selectPiece, setActivePieces } from 'game/selectpieces';
 import { omit, filter, findWhere, map, mapObject } from 'underscore';
 
@@ -45,7 +45,7 @@ const potentialMoves = (pieces, activePieceCellRef, gridSize, invert = false) =>
 			if(isInGrid(backward, gridSize) && isInGrid(left, gridSize)){
 				potentialMoves.push(gridRefNumericalArrayToString([backward, left])); // potential move
 			}
-			if(isInGrid(forward, gridSize) && isInGrid(right, gridSize)){
+			if(isInGrid(backward, gridSize) && isInGrid(right, gridSize)){
 				potentialMoves.push(gridRefNumericalArrayToString([backward, right])); // potential move
 			}
 
@@ -62,8 +62,8 @@ const potentialMoves = (pieces, activePieceCellRef, gridSize, invert = false) =>
 const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 
 	const activePiece = pieces[activePieceCellRef]; // the piece passed in
-	let hasCaptureMoves = false; // track whether there are capturing moves the player must make
 	
+	let hasCaptureMoves = false; // track whether there are capturing moves the player must make
 	let availableMoves = []; // array to return
 
 	if(activePiece){ // if the piece requested exists
@@ -89,7 +89,7 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 
 				map(potentialMoves(pieces, piece.cellRef, gridSize, true), (potentialCaptureMove, k) => { // fetch state of squares behind the enemy piece
 
-					let farPiece = pieces[potentialCaptureMove]; // check whether the potential move square contains a piece
+					const farPiece = pieces[potentialCaptureMove]; // check whether the potential move square contains a piece
 					const farPieceColIndex = gridRefStringToNumericalArray(potentialCaptureMove)[1]; // the col index of the far square 
 
 					if(!farPiece){ // if the square is empty
@@ -114,9 +114,9 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 
 	}
 
-	if(hasCaptureMoves){ // if piece has any capture moves available, remove all non capturing moves
-		availableMoves = filter(availableMoves, (availableMove) => { 
-			return (availableMove.captures !== null && availableMove.captures.length); 
+	if(hasCaptureMoves){ // if piece has any capture moves available, only return those
+		availableMoves = availableMoves.filter((availableMove) => { 
+			return availableMove.captures; 
 		});
 	}
 
@@ -132,6 +132,7 @@ const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
 
 	let selectedPiece = findWhere(pieces, { selected: true }); // find and cache the active piece data
 	let turnComplete = true; // assume it's a single move turn
+	let coronated = false;
 
 	if(selectedPiece){
 
@@ -146,6 +147,11 @@ const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
 
 		selectedPiece['selected'] = false; // update property of cached active piece
 		selectedPiece['cellRef'] = landingPieceCellRef; // update property of cached active piece
+
+		if(canCoronate(landingPieceCellRef, selectedPiece['player'], gridSize) && selectedPiece['type'] !== 'king'){
+			selectedPiece['type'] = 'king';
+			coronated = true;
+		}
 
 		updatedPieces[landingPieceCellRef] = selectedPiece; // set the active piece from cached object
 
@@ -166,6 +172,7 @@ const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
 
 		return {
 			captures: capturedPiece,
+			coronated: coronated,
 			pieces: updatedPieces,
 			turnComplete: turnComplete
 		}

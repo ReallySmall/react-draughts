@@ -13,13 +13,13 @@ export default class ActivePiece extends Component {
     const selectedClass = selected === true ? 'selected' : '';
 
     return (
-      <button className={cx('piece', 'moveable', colour, type, selectedClass)}
+      <button className={cx('piece', 'moveable', colour, selectedClass)}
         onClick={
           (event) => {
             event.preventDefault();
             setPieceSelection(cellRef);
           }
-        }>{accessibleInfo}</button>
+        }>{accessibleInfo}{<i className={cx(type)}></i>}</button>
     );
 
   }

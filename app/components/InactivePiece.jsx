@@ -12,7 +12,7 @@ export default class InactivePiece extends Component {
   	const accessibleInfo = <span className={cx('visually-hidden')}>Player {player} {type}</span>;
 
     return (
-      <p className={cx('piece', 'plain', colour, type)}>{accessibleInfo}</p>
+      <p className={cx('piece', 'plain', colour)}>{accessibleInfo}{<i className={cx(type)}></i>}</p>
     );
     
   }
