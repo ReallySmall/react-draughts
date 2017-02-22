@@ -9,7 +9,7 @@ const isInGrid = (gridIndex, gridSize) => {
 		return true;
 	}
 
-	return false
+	return false;
 
 };
 
@@ -27,7 +27,6 @@ const potentialMoves = (pieces, activePieceCellRef, gridSize, invert = false) =>
 		const baseDirection = invert === true ? 1 : 0;
 		const directionOfPlay = player === baseDirection ? +1 : -1;
 		const reverseDirectionOfPlay = player === baseDirection ? -1 : +1;
-
 		const forward = cellRef[0] + directionOfPlay; // the next row in the direction of the enemy starting point
 		const backward = cellRef[0] + reverseDirectionOfPlay; // the previous row in the direction of the enemy starting point
 		const left = cellRef[1] - 1; // the col to the left
@@ -36,6 +35,7 @@ const potentialMoves = (pieces, activePieceCellRef, gridSize, invert = false) =>
 		if(isInGrid(forward, gridSize) && isInGrid(left, gridSize)){
 			potentialMoves.push(gridRefNumericalArrayToString([forward, left])); // potential move
 		}
+
 		if(isInGrid(forward, gridSize) && isInGrid(right, gridSize)){
 			potentialMoves.push(gridRefNumericalArrayToString([forward, right])); // potential move
 		}
@@ -45,6 +45,7 @@ const potentialMoves = (pieces, activePieceCellRef, gridSize, invert = false) =>
 			if(isInGrid(backward, gridSize) && isInGrid(left, gridSize)){
 				potentialMoves.push(gridRefNumericalArrayToString([backward, left])); // potential move
 			}
+
 			if(isInGrid(backward, gridSize) && isInGrid(right, gridSize)){
 				potentialMoves.push(gridRefNumericalArrayToString([backward, right])); // potential move
 			}
@@ -74,7 +75,6 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 		map(potentialMoves(pieces, activePieceCellRef, gridSize), (potentialMove, j) => { // fetch and loop though potential moves available to the active piece
 
 			const piece = pieces[potentialMove]; // check whether the potential move square contains a piece
-			const singleMove = potentialMove;
 
 			if(!piece){ // if the square is empty
 
@@ -86,8 +86,9 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 			} else if(piece && piece.player !== player){ // otherwise if the square contains an enemy piece, then check if the square beyond it is empty, allowing a capture
 
 				const pieceColIndex = gridRefStringToNumericalArray(piece.cellRef)[1]; // the col index of the enemy piece
+				const invert = activePiece.type === 'king' ? false : true;
 
-				map(potentialMoves(pieces, piece.cellRef, gridSize, true), (potentialCaptureMove, k) => { // fetch state of squares behind the enemy piece
+				map(potentialMoves(pieces, piece.cellRef, gridSize, invert), (potentialCaptureMove, k) => { // fetch state of squares behind the enemy piece
 
 					const farPiece = pieces[potentialCaptureMove]; // check whether the potential move square contains a piece
 					const farPieceColIndex = gridRefStringToNumericalArray(potentialCaptureMove)[1]; // the col index of the far square 
@@ -126,7 +127,7 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 
 
 // Move an active piece to a new square, capturing an enemy piece if possible
-const moveActivePiece = function(pieces, landingPieceCellRef, gridSize){
+const moveActivePiece = (pieces, landingPieceCellRef, gridSize) => {
 
 	const capturedPiece = pieces[landingPieceCellRef].captures; // any pieces that will be captured moving to this square
 

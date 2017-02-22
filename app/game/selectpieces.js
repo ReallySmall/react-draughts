@@ -1,9 +1,9 @@
 import { gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
 import { potentialMoves, availableMoves, moveActivePiece } from 'game/movepieces';
-import { omit, findWhere, map, mapObject, some } from 'underscore';
+import { omit, findWhere, map, mapObject, some, each } from 'underscore';
 
 // Unselect all pieces
-const unselectAllPieces = (pieces) => {
+const unselectAllPieces = pieces => {
 
 	let updatedPieces = mapObject(pieces, (piece) => {
 
@@ -55,39 +55,43 @@ const setActivePieces = (pieces, activePlayer, gridSize) => {
 
 	let canCapture = false;
 
-	let updatedPieces = mapObject(pieces, (piece) => { // create new pieces object
-
-		const moves = availableMoves(pieces, piece.cellRef, gridSize); // get available moves for each piece
-
+	each(pieces, (piece) => {  
+    	
 		if(piece && piece.player === activePlayer){
-			piece.active = moves.length ? true : false; // should piece be active?
+
+			const moves = availableMoves(pieces, piece.cellRef, gridSize); // get available moves for each piece
+
 			if(some(moves, (move) => { return move.captures })){ // if piece can capture an enemy piece
 				canCapture = true; //... flag it
 			}
-		} else {
-			piece.active = false;
-		}
 
-		return piece;
+		}
 
 	});
 
-	if(canCapture){ // if captures are possible
+	const updatedPieces = mapObject(pieces, (piece) => { // recreate the pieces object
 
-		updatedPieces = mapObject(updatedPieces, (piece) => { // recreate the pieces object
+		if(piece){
 
-			const moves = availableMoves(pieces, piece.cellRef, gridSize);
+			if(piece.player === activePlayer){
 
-			if(piece && piece.player === activePlayer){
-				// but this time only make pieces active that can capture
-				piece.active = moves.length && some(moves, (move) => { return move.captures }) ? true : false;
+				const moves = availableMoves(pieces, piece.cellRef, gridSize);
+
+				if(canCapture){ // if captures are possible
+					piece.active = moves.length && some(moves, (move) => { return move.captures }) ? true : false;
+				} else {
+					piece.active = moves.length ? true : false;
+				}
+
+			} else {
+				piece.active = false;
 			}
 
 			return piece;
 
-		});
+		}
 
-	}
+	});
 
 	return {
 		captures: canCapture,
