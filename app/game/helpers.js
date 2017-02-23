@@ -1,5 +1,30 @@
 import { omit, findWhere, map, mapObject } from 'underscore';
 
+// calculate direction of potential capture
+const invertPlayDirection = (activePiece, opponentPiece) => { // TODO
+
+	const activeCellArray = gridRefStringToNumericalArray(activePiece.cellRef);
+	const opponentCellArray = gridRefStringToNumericalArray(opponentPiece.cellRef);
+
+	return activePiece.type === 'king' ? false : true
+
+};
+
+// is a potential capture landing square in the movemnt plane of the active piece (pieces can only capture in straight lines)
+const inMovementPlane = (activeCellRef, opponentCellRef, landingCellRef) => {
+
+	const activeCellColIndex = gridRefStringToNumericalArray(activeCellRef)[1];
+	const opponentCellColIndex = gridRefStringToNumericalArray(opponentCellRef)[1];
+	const landingCellColIndex = gridRefStringToNumericalArray(landingCellRef)[1];
+
+	if((opponentCellColIndex > activeCellColIndex && landingCellColIndex > opponentCellColIndex) || (opponentCellColIndex < activeCellColIndex && landingCellColIndex < opponentCellColIndex)){
+		return true;
+	}
+
+	return false;
+
+};
+
 // convert a grid ref string to a numerical array
 const canCoronate = (cellRef, player, gridSize) => {
 
@@ -15,7 +40,7 @@ const canCoronate = (cellRef, player, gridSize) => {
 
 	return false;
 
-}
+};
 
 // convert a grid ref string to a numerical array
 const gridRefStringToNumericalArray = (cellRef) => {
@@ -28,7 +53,7 @@ const gridRefStringToNumericalArray = (cellRef) => {
 
 	return cellRefArray;
 
-}
+};
 
 // convert a grid ref string to a numerical array
 const gridRefNumericalArrayToString = (cellRef) => {
@@ -37,7 +62,7 @@ const gridRefNumericalArrayToString = (cellRef) => {
 
 	return cellRefString;
 
-}
+};
 
 // return a friendly alphanumeric grid reference for front end updates
 const toFriendlyGridRef = (cellRef) => {
@@ -63,4 +88,4 @@ const createGameHistoryEntry = (message, player) => {
 
 };
 
-export { canCoronate, createGameHistoryEntry, gridRefStringToNumericalArray, gridRefNumericalArrayToString, toFriendlyGridRef };
+export { canCoronate, createGameHistoryEntry, gridRefStringToNumericalArray, gridRefNumericalArrayToString, inMovementPlane, invertPlayDirection, toFriendlyGridRef };

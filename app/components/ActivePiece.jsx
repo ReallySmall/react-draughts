@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Crown from 'components/Crown';
 import classNames from 'classnames/bind';
 import styles from 'css/components/_piece';
 
@@ -19,7 +20,7 @@ export default class ActivePiece extends Component {
             event.preventDefault();
             setPieceSelection(cellRef);
           }
-        }>{accessibleInfo}{<i className={cx(type)}></i>}</button>
+        }>{accessibleInfo}{type === 'king' && <Crown/>}</button>
     );
 
   }

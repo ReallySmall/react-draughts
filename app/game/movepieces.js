@@ -1,4 +1,4 @@
-import { canCoronate, gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
+import { canCoronate, gridRefStringToNumericalArray, gridRefNumericalArrayToString, inMovementPlane, invertPlayDirection } from 'game/helpers';
 import { unselectAllPieces, selectPiece, setActivePieces } from 'game/selectpieces';
 import { omit, filter, findWhere, map, mapObject } from 'underscore';
 
@@ -70,7 +70,6 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 	if(activePiece){ // if the piece requested exists
 
 		const player = activePiece.player; // the player owning the active piece
-		const activePieceColIndex = gridRefStringToNumericalArray(activePiece.cellRef)[1]; // the col index of the active piece
 		
 		map(potentialMoves(pieces, activePieceCellRef, gridSize), (potentialMove, j) => { // fetch and loop though potential moves available to the active piece
 
@@ -85,26 +84,18 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 
 			} else if(piece && piece.player !== player){ // otherwise if the square contains an enemy piece, then check if the square beyond it is empty, allowing a capture
 
-				const pieceColIndex = gridRefStringToNumericalArray(piece.cellRef)[1]; // the col index of the enemy piece
-				const invert = activePiece.type === 'king' ? false : true;
+				const invert = invertPlayDirection(activePiece, piece);
 
 				map(potentialMoves(pieces, piece.cellRef, gridSize, invert), (potentialCaptureMove, k) => { // fetch state of squares behind the enemy piece
 
-					const farPiece = pieces[potentialCaptureMove]; // check whether the potential move square contains a piece
-					const farPieceColIndex = gridRefStringToNumericalArray(potentialCaptureMove)[1]; // the col index of the far square 
+					if(!pieces[potentialCaptureMove] && inMovementPlane(activePiece.cellRef, piece.cellRef, potentialCaptureMove)){ // if the square is empty
 
-					if(!farPiece){ // if the square is empty
+						availableMoves.push({
+							move: potentialCaptureMove,
+							captures: piece.cellRef
+						}); // this is a move the active piece can make, capturing an opponent in the process
 
-						if((pieceColIndex > activePieceColIndex && farPieceColIndex > pieceColIndex) || (pieceColIndex < activePieceColIndex && farPieceColIndex < pieceColIndex)){
-
-							availableMoves.push({
-								move: potentialCaptureMove,
-								captures: piece.cellRef
-							});
-
-							hasCaptureMoves = true;
-
-						}
+						hasCaptureMoves = true;
 
 					}
 
@@ -163,7 +154,7 @@ const moveActivePiece = (pieces, landingPieceCellRef, gridSize) => {
 				if(potentialMove.captures !== null){
 					updatedPieces[landingPieceCellRef]['active'] = true;
 					updatedPieces[landingPieceCellRef]['selected'] = true;
-					updatedPieces = selectPiece(updatedPieces, landingPieceCellRef);
+					updatedPieces = selectPiece(updatedPieces, landingPieceCellRef, gridSize);
 					turnComplete = false;
 				}
 				

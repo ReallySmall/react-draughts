@@ -9,7 +9,7 @@ export default class CurrentGame extends Component {
 
   render(){
 
-  	const { activePlayer, players, history } = this.props;
+  	const { activePlayer, players, history, finished } = this.props;
 
     return (
     	<aside>

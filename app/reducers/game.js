@@ -28,6 +28,7 @@ export default function game(state = {
     { name: 'Player 2', pieces: defaultStartingPieceCount } 
   ],
   started: false,
+  finished: false,
   history: [],
   moves: 0,
   pieces: createPieces(defaultGridSize, defaultStartingPieceCount)
@@ -85,6 +86,7 @@ export default function game(state = {
       let pieceMoveMessage;
       let opponent = state.activePlayer === 0 ? 1 : 0; // set active player to other player;
       let nextPlayer = opponent;
+      let finished = state.finished;
 
       if(move.captures){ // if the move captured a piece
 
@@ -105,9 +107,12 @@ export default function game(state = {
 
       if(move.turnComplete){ // if there are no subsequent mandatory captures
 
-        if(playerData[0].pieces.length || playerData[1].pieces.length){
+        if(playerData[0].pieces === 0 || playerData[1].pieces === 0){
 
-          pieceMoveMessage = [createGameHistoryEntry('Game complete'), ...pieceMoveMessage];
+          const winner = playerData[0].pieces > playerData[1].pieces ? 0 : 1; 
+          
+          pieceMoveMessage = [createGameHistoryEntry(state.players[winner]['name'] + ' - you won the game in ' + state.moves + ' moves!', winner), ...pieceMoveMessage, winner];
+          finished = true;
 
         } else {
 
@@ -136,7 +141,8 @@ export default function game(state = {
         players: playerData,
         history: pieceMoveMessage,
         activePlayer: nextPlayer,
-        moves: state.moves + 1
+        moves: state.moves + 1,
+        finished: finished
       });
 
     default:
