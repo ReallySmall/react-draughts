@@ -63,6 +63,7 @@ const createPieces = (gridSize, piecesPerPlayer) => {
 
 		        let piece = { 
 		        	cellRef: cellRef,
+		        	gridSize: gridSize,
 		        	player: 0,
 		        	colour: 'player1', 
 		        	type: 'pawn', 

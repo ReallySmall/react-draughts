@@ -1,12 +1,39 @@
 import { omit, findWhere, map, mapObject } from 'underscore';
 
 // calculate direction of potential capture
-const invertPlayDirection = (activePiece, opponentPiece) => { // TODO
+// landing squares are calculated from pov of the piece being captured
+// when capturing with pawns, default behaviour is to invert direction of play
+// because the piece capturing it is moving in the other direction.
+// Kings can capture in either direction and require additional logic
+const invertPlayDirection = (activePiece, opponentPiece) => {
+
+	if(activePiece.type !== 'king'){
+		return true;
+	}
 
 	const activeCellArray = gridRefStringToNumericalArray(activePiece.cellRef);
 	const opponentCellArray = gridRefStringToNumericalArray(opponentPiece.cellRef);
 
-	return activePiece.type === 'king' ? false : true
+	console.log('activeCellArray', activeCellArray);
+	console.log('opponentCellArray', opponentCellArray);
+
+	if(activePiece.player === 0){ // if the king belongs to player 1
+
+		if(activeCellArray[0] < opponentCellArray[0]){
+			return true;
+		}
+
+		return false;
+
+	} else { // if the king belongs to player 2
+
+		if(activeCellArray[0] > opponentCellArray[0]){
+			return true;
+		}
+
+		return false;
+
+	}
 
 };
 

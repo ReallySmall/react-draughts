@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { isClient } from 'helpers/environment';
 import { fetchWrapper } from 'actions/wrapper';
 import Board from 'components/Board';
 

@@ -79,7 +79,7 @@ export default function game(state = {
 
     case MOVE_ACTIVE_PIECE:
 
-      const move = moveActivePiece(state.pieces, action.cellRef, state.gridSize); // move the piece
+      let move = moveActivePiece(state.pieces, action.cellRef, state.gridSize); // move the piece
 
       let updatedPieces = move.pieces; // pieces to assign back to state
       let playerData = state.players;
@@ -102,6 +102,7 @@ export default function game(state = {
       if(move.coronated){
 
         pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' crowned a piece!', state.activePlayer), ...pieceMoveMessage];
+        move.turnComplete = true;
 
       }
 

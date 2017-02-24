@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { clearPieceSelections, moveActivePieceToHere, setPieceSelection } from 'actions/pieces';
 import { find } from "underscore";
-import { isClient } from 'helpers/environment';
 import ActivePiece from 'components/ActivePiece';
 import InactivePiece from 'components/InactivePiece';
 import Landing from 'components/Landing';

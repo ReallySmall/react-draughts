@@ -85,6 +85,7 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 			} else if(piece && piece.player !== player){ // otherwise if the square contains an enemy piece, then check if the square beyond it is empty, allowing a capture
 
 				const invert = invertPlayDirection(activePiece, piece);
+				console.log(invert);
 
 				map(potentialMoves(pieces, piece.cellRef, gridSize, invert), (potentialCaptureMove, k) => { // fetch state of squares behind the enemy piece
 

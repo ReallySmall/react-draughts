@@ -34,7 +34,8 @@ const selectPiece = (pieces, activePieceCellRef, gridSize) => {
 		const { move, captures } = potentialMove
 
 		updatedPieces[move] = { 
-			cellRef: move, 
+			cellRef: move,
+			gridSize: gridSize,
         	player: player,
         	colour: 'landing', 
 			type: 'landing', 
