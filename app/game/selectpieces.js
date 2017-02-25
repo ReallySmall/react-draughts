@@ -56,6 +56,13 @@ const setActivePieces = (pieces, activePlayer, gridSize) => {
 
 	let canCapture = false;
 
+	if(activePlayer === null){
+		return {
+			captures: canCapture,
+			pieces: pieces
+		}
+	};
+
 	each(pieces, (piece) => {  
     	
 		if(piece && piece.player === activePlayer){
@@ -97,7 +104,7 @@ const setActivePieces = (pieces, activePlayer, gridSize) => {
 	return {
 		captures: canCapture,
 		pieces: updatedPieces
-	}
+	};
 
 };
 

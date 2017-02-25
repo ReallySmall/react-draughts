@@ -7,15 +7,12 @@ import { omit, findWhere, map, mapObject } from 'underscore';
 // Kings can capture in either direction and require additional logic
 const invertPlayDirection = (activePiece, opponentPiece) => {
 
-	if(activePiece.type !== 'king'){
+	if(activePiece.type !== 'king' && opponentPiece.type !== 'king'){
 		return true;
 	}
 
 	const activeCellArray = gridRefStringToNumericalArray(activePiece.cellRef);
 	const opponentCellArray = gridRefStringToNumericalArray(opponentPiece.cellRef);
-
-	console.log('activeCellArray', activeCellArray);
-	console.log('opponentCellArray', opponentCellArray);
 
 	if(activePiece.player === 0){ // if the king belongs to player 1
 

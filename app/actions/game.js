@@ -34,3 +34,9 @@ export function startGame(settings) {
     settings: settings
   }
 }
+
+export function endGame() {
+  return {
+    type: types.END_GAME
+  }
+}

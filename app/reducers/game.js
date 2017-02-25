@@ -1,7 +1,6 @@
-import { createGameHistoryEntry, toFriendlyGridRef, gridRefStringToNumericalArray, gridRefNumericalArrayToString } from 'game/helpers';
-import { createGrid, createPieces } from 'game/setuppieces';
-import { availableMoves, moveActivePiece } from 'game/movepieces';
-import { unselectAllPieces, selectPiece, setActivePieces } from 'game/selectpieces';
+import { createGameHistoryEntry } from 'game/helpers';
+import { createGrid } from 'game/setuppieces';
+import Pieces from 'classes/pieces';
 
 import {
   CHANGE_GAME_TYPE_SUCCESS,
@@ -16,11 +15,12 @@ import {
 
 const defaultGridSize = 8;
 const defaultStartingPieceCount = 12;
+const gamePieces = new Pieces(defaultGridSize);
 
 export default function game(state = {
 
   grid: createGrid(defaultGridSize),
-  gridSize: 8,
+  gridSize: defaultGridSize,
   startingPieceCount: defaultStartingPieceCount,
   activePlayer: 0,
   players: [
@@ -31,7 +31,8 @@ export default function game(state = {
   finished: false,
   history: [],
   moves: 0,
-  pieces: createPieces(defaultGridSize, defaultStartingPieceCount)
+  pieces: gamePieces.createPieces(defaultGridSize, defaultStartingPieceCount)
+
 }, action) {
 
   switch (action.type) {
@@ -46,7 +47,7 @@ export default function game(state = {
         ],
         startingPieceCount: action.req.data.initialPieces,
         rules: action.req.data.rules,
-        pieces: createPieces(action.req.data.gridSize, action.req.data.initialPieces)
+        pieces: gamePieces.createPieces(action.req.data.gridSize, action.req.data.initialPieces)
       });
 
     case START_GAME:
@@ -59,29 +60,46 @@ export default function game(state = {
         started: true,
         activePlayer: 0,
         history: startGameMessage,
-        pieces: setActivePieces(state.pieces, 0, state.gridSize).pieces
+        pieces: gamePieces.setActivePieces(0).pieces
+      });
+
+    case END_GAME:
+
+      return Object.assign({}, state, {
+        grid: createGrid(defaultGridSize),
+        gridSize: defaultGridSize,
+        startingPieceCount: defaultStartingPieceCount,
+        activePlayer: 0,
+        players: [
+          { name: 'Player 1', pieces: defaultStartingPieceCount }, 
+          { name: 'Player 2', pieces: defaultStartingPieceCount } 
+        ],
+        started: false,
+        finished: false,
+        history: [],
+        moves: 0,
+        pieces: gamePieces.createPieces(defaultGridSize, defaultStartingPieceCount)
       });
 
     case CREATE_PIECE_COLLECTION:
       return Object.assign({}, state, {
-        pieces: createPieces(state.gridSize, state.startingPieceCount)
+        pieces: gamePieces.createPieces(state.gridSize, state.startingPieceCount)
       });
 
     case SET_PIECE_SELECTION:
       return Object.assign({}, state, {
-        pieces: selectPiece(state.pieces, action.cellRef, state.gridSize)
+        pieces: gamePieces.selectPiece(action.cellRef)
       });
 
     case CLEAR_PIECE_SELECTIONS:
       return Object.assign({}, state, {
-        pieces: unselectAllPieces(state.pieces)
+        pieces: gamePieces.unselectAllPieces()
       });
 
     case MOVE_ACTIVE_PIECE:
 
-      let move = moveActivePiece(state.pieces, action.cellRef, state.gridSize); // move the piece
+      const move = gamePieces.moveActivePiece(action.cellRef); // move the piece
 
-      let updatedPieces = move.pieces; // pieces to assign back to state
       let playerData = state.players;
       let pieceMoveMessage;
       let opponent = state.activePlayer === 0 ? 1 : 0; // set active player to other player;
@@ -106,23 +124,22 @@ export default function game(state = {
 
       }
 
-      if(move.turnComplete){ // if there are no subsequent mandatory captures
+      if(move.over){ // if there are no subsequent mandatory captures
 
         if(playerData[0].pieces === 0 || playerData[1].pieces === 0){
 
           const winner = playerData[0].pieces > playerData[1].pieces ? 0 : 1; 
           
           pieceMoveMessage = [createGameHistoryEntry(state.players[winner]['name'] + ' - you won the game in ' + state.moves + ' moves!', winner), ...pieceMoveMessage, winner];
+          gamePieces.unselectAllPieces();
+          gamePieces.setActivePieces(null);
           finished = true;
 
         } else {
 
           pieceMoveMessage = [createGameHistoryEntry(state.players[opponent]['name'] + ' - it\'s your move', opponent), ...pieceMoveMessage];
 
-          const activePieces = setActivePieces(updatedPieces, opponent, state.gridSize);
-          updatedPieces = activePieces.pieces; // set the active pieces for the next move
-
-          if(activePieces.captures === true){
+          if(gamePieces.setActivePieces(opponent).captures){
 
             pieceMoveMessage = [createGameHistoryEntry(state.players[opponent]['name'] + ' - you must capture a piece', opponent), ...pieceMoveMessage];
           
@@ -138,7 +155,7 @@ export default function game(state = {
       }
 
       return Object.assign({}, state, {
-        pieces: updatedPieces,
+        pieces: gamePieces.returnPieces(),
         players: playerData,
         history: pieceMoveMessage,
         activePlayer: nextPlayer,

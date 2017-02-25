@@ -9,11 +9,21 @@ export default class CurrentGame extends Component {
 
   render(){
 
-  	const { activePlayer, players, history, finished } = this.props;
+  	const { activePlayer, players, history, finished, endGame } = this.props;
 
     return (
     	<aside>
         <h2>Current Game</h2>
+        {finished && <form className={cx('form')}>
+          <div className={cx('form-control')}>
+            <button onClick={
+              (event) => {
+                event.preventDefault();
+                endGame();
+              } 
+            }>Play again</button>
+          </div>
+        </form>}
         <div className={cx('scroll-wrapper')}>
           <ul className={cx('game-history')}>
           	{map(history, function(gameEvent, i){

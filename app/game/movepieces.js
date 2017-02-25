@@ -85,7 +85,6 @@ const availableMoves = (pieces, activePieceCellRef, gridSize) => {
 			} else if(piece && piece.player !== player){ // otherwise if the square contains an enemy piece, then check if the square beyond it is empty, allowing a capture
 
 				const invert = invertPlayDirection(activePiece, piece);
-				console.log(invert);
 
 				map(potentialMoves(pieces, piece.cellRef, gridSize, invert), (potentialCaptureMove, k) => { // fetch state of squares behind the enemy piece
 
@@ -124,7 +123,7 @@ const moveActivePiece = (pieces, landingPieceCellRef, gridSize) => {
 	const capturedPiece = pieces[landingPieceCellRef].captures; // any pieces that will be captured moving to this square
 
 	let selectedPiece = findWhere(pieces, { selected: true }); // find and cache the active piece data
-	let turnComplete = true; // assume it's a single move turn
+	let over = true; // assume it's a single move turn
 	let coronated = false;
 
 	if(selectedPiece){
@@ -156,7 +155,7 @@ const moveActivePiece = (pieces, landingPieceCellRef, gridSize) => {
 					updatedPieces[landingPieceCellRef]['active'] = true;
 					updatedPieces[landingPieceCellRef]['selected'] = true;
 					updatedPieces = selectPiece(updatedPieces, landingPieceCellRef, gridSize);
-					turnComplete = false;
+					over = false;
 				}
 				
 		 	});
@@ -167,7 +166,7 @@ const moveActivePiece = (pieces, landingPieceCellRef, gridSize) => {
 			captures: capturedPiece,
 			coronated: coronated,
 			pieces: updatedPieces,
-			turnComplete: turnComplete
+			over: over
 		}
 
 	}
