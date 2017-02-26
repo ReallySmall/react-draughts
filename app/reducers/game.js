@@ -1,6 +1,6 @@
-import { createGameHistoryEntry } from 'game/helpers';
 import { createGrid } from 'game/setuppieces';
 import Pieces from 'classes/pieces';
+import GameHistory from 'classes/history';
 
 import {
   CHANGE_GAME_TYPE_SUCCESS,
@@ -16,6 +16,7 @@ import {
 const defaultGridSize = 8;
 const defaultStartingPieceCount = 12;
 const gamePieces = new Pieces(defaultGridSize);
+const gameMessages = new GameHistory();
 
 export default function game(state = {
 
@@ -52,14 +53,13 @@ export default function game(state = {
 
     case START_GAME:
 
-      let startGameMessage = [createGameHistoryEntry('New game started'), ...state.history];
-
-      startGameMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' - it\'s your move', state.activePlayer), ...startGameMessage]
+      gameMessages.startGame();
+      gameMessages.yourMove(state.players, state.activePlayer);
 
       return Object.assign({}, state, {
         started: true,
         activePlayer: 0,
-        history: startGameMessage,
+        history: gameMessages.returnHistory(state.history),
         pieces: gamePieces.setActivePieces(0).pieces
       });
 
@@ -109,19 +109,15 @@ export default function game(state = {
       if(move.captures){ // if the move captured a piece
 
         playerData[opponent].pieces = playerData[opponent].pieces - 1;
-        pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' moved to ' + toFriendlyGridRef(action.cellRef) + ' and captured a piece', state.activePlayer), ...state.history];
+        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, true);
       
       } else { // if the move didn't capture a piece
-
-        pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' moved to ' + toFriendlyGridRef(action.cellRef), state.activePlayer), ...state.history];
-      
+        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, false);
       }
 
       if(move.coronated){
-
-        pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' crowned a piece!', state.activePlayer), ...pieceMoveMessage];
+        gameMessages.coronated(state.activePlayer);
         move.turnComplete = true;
-
       }
 
       if(move.over){ // if there are no subsequent mandatory captures
@@ -130,34 +126,30 @@ export default function game(state = {
 
           const winner = playerData[0].pieces > playerData[1].pieces ? 0 : 1; 
           
-          pieceMoveMessage = [createGameHistoryEntry(state.players[winner]['name'] + ' - you won the game in ' + state.moves + ' moves!', winner), ...pieceMoveMessage, winner];
+          gameMessages.victory(playerData, winner, state.moves);
           gamePieces.unselectAllPieces();
           gamePieces.setActivePieces(null);
           finished = true;
 
         } else {
 
-          pieceMoveMessage = [createGameHistoryEntry(state.players[opponent]['name'] + ' - it\'s your move', opponent), ...pieceMoveMessage];
+          gameMessages.yourMove(playerData, opponent);
 
           if(gamePieces.setActivePieces(opponent).captures){
-
-            pieceMoveMessage = [createGameHistoryEntry(state.players[opponent]['name'] + ' - you must capture a piece', opponent), ...pieceMoveMessage];
-          
+            gameMessages.mustCapture(playerData, opponent);
           }
 
         }
 
       } else {
-
         nextPlayer = state.activePlayer;
-        pieceMoveMessage = [createGameHistoryEntry(state.players[state.activePlayer]['name'] + ' - you must make another move', state.activePlayer), ...pieceMoveMessage];
-      
+        gameMessages.mustMove(playerData, state.activePlayer);      
       }
 
       return Object.assign({}, state, {
         pieces: gamePieces.returnPieces(),
         players: playerData,
-        history: pieceMoveMessage,
+        history: gameMessages.returnHistory(state.history),
         activePlayer: nextPlayer,
         moves: state.moves + 1,
         finished: finished
