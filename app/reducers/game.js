@@ -116,8 +116,8 @@ export default function game(state = {
       }
 
       if(move.coronated){
-        gameMessages.coronated(state.activePlayer);
-        move.turnComplete = true;
+        gameMessages.coronated(playerData, state.activePlayer);
+        move.over = true;
       }
 
       if(move.over){ // if there are no subsequent mandatory captures
