@@ -102,7 +102,7 @@ export default function game(state = {
 
       let playerData = state.players;
       let pieceMoveMessage;
-      let opponent = state.activePlayer === 0 ? 1 : 0; // set active player to other player;
+      let opponent = state.activePlayer === 0 ? 1 : 0;
       let nextPlayer = opponent;
       let finished = state.finished;
 
@@ -115,35 +115,35 @@ export default function game(state = {
         gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, false);
       }
 
-      if(move.coronated){
+      if(move.coronated){ // if piece landed on opposing end of the board, it becomes a king
         gameMessages.coronated(playerData, state.activePlayer);
-        move.over = true;
+        move.over = true; // the turn always finishes when a piece becomes a king, even if further captures are possible
       }
 
-      if(move.over){ // if there are no subsequent mandatory captures
+      if(move.over){ // if there are no subsequent mandatory captures for the piece to make
 
-        if(playerData[0].pieces === 0 || playerData[1].pieces === 0){
+        if(playerData[0].pieces === 0 || playerData[1].pieces === 0){ // the game is over if either player has run out of pieces
 
-          const winner = playerData[0].pieces > playerData[1].pieces ? 0 : 1; 
+          const winner = playerData[0].pieces > playerData[1].pieces ? 0 : 1; // the winner has at least on piece left
           
           gameMessages.victory(playerData, winner, state.moves);
-          gamePieces.unselectAllPieces();
-          gamePieces.setActivePieces(null);
-          finished = true;
+          gamePieces.unselectAllPieces(); // remove slections
+          gamePieces.setActivePieces(-1); // and make all remaining pieces inactive
+          finished = true; // this flag renders the 'play again?' button
 
         } else {
 
-          gameMessages.yourMove(playerData, opponent);
+          gameMessages.yourMove(playerData, opponent); // opposing player it's now your turn
 
           if(gamePieces.setActivePieces(opponent).captures){
-            gameMessages.mustCapture(playerData, opponent);
+            gameMessages.mustCapture(playerData, opponent); // there's at least one cpture move you must make
           }
 
         }
 
-      } else {
-        nextPlayer = state.activePlayer;
-        gameMessages.mustMove(playerData, state.activePlayer);      
+      } else { // if the current player's move isn't over because there's a further possible capture move
+        nextPlayer = state.activePlayer; // next player is the same player
+        gameMessages.mustMove(playerData, state.activePlayer); // you must capture another piece      
       }
 
       return Object.assign({}, state, {

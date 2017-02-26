@@ -100,11 +100,15 @@
 	}
 	.cell-ref {
 		font-size: 18px;
+		display: none;
 		color: whitesmoke;
 	}
 }
 
-@-webkit-keyframes rotation {
-    from {-webkit-transform: rotate(0deg);}
-    to   {-webkit-transform: rotate(359deg);}
+@media (min-width: 768px) {
+
+	.cell-ref {
+		display: block;
+	}
+
 }
