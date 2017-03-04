@@ -98,12 +98,6 @@ module.exports = [
       // The output path from the view of the Javascript
       publicPath: publicPath
     },
-    externals: {
-        // require("jquery") is external and available
-        //  on the global var jQuery
-        "jquery": "jQuery",
-        "$": "jQuery"
-    },
     module: {
       loaders: commonLoaders
     },
@@ -145,11 +139,7 @@ module.exports = [
           __DEVCLIENT__: false,
           __DEVSERVER__: false
         }),
-        new InlineEnviromentVariablesPlugin({ NODE_ENV: 'production' }),
-        new webpack.ProvidePlugin({ 
-          $: 'jquery', 
-          jQuery: 'jquery' 
-        })
+        new InlineEnviromentVariablesPlugin({ NODE_ENV: 'production' })
     ],
     postcss: postCSSConfig
   }, {

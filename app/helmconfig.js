@@ -50,12 +50,10 @@ const config = {
     { 'name': 'msapplication-TileImage', 'content': mscon },
     { 'name': 'msapplication-TileColor', 'content': '#3372DF' },
     // og tags
-    { 'name': 'og:site_name', 'content': 'React Draughts' },
+    { 'name': 'og:title', 'content': 'React Draughts' },
     { 'name': 'og:description', 'content': defaultMetaDesc },
-    { 'name': 'og:image', 'content': ogimage },
-    { 'name': 'og:image:url', 'content': ogimage },
-    { 'name': 'og:image:secure_url', 'content': ogimage }
-
+    { 'name': 'og:type', 'content': 'game' },
+    { 'name': 'og:image', 'content': 'https://react-draughts.herokuapp.com' + ogimage } // TODO - yuck, fix this hardcoded path
   ]
 };
 
