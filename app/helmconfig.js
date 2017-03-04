@@ -14,6 +14,7 @@ import chromecon from 'file!images/android-chrome-192x192.png';
 import applecon from 'file!images/apple-touch-icon.png';
 import mscon from 'file!images/mstile-150x150.png';
 import favicon from 'file!images/favicon.ico';
+import ogimage from 'file!images/react-draughts.png';
 
 const defaultMetaDesc = 'Draughts in React and Redux';
 
@@ -50,7 +51,9 @@ const config = {
     { 'name': 'msapplication-TileColor', 'content': '#3372DF' },
     // og tags
     { 'name': 'og:site_name', 'content': 'React Draughts' },
-    { 'name': 'og:description', 'content': defaultMetaDesc }
+    { 'name': 'og:description', 'content': defaultMetaDesc },
+    { 'name': 'og:image', 'content': ogimage }
+
   ]
 };
 
