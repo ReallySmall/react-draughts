@@ -52,7 +52,9 @@ const config = {
     // og tags
     { 'name': 'og:site_name', 'content': 'React Draughts' },
     { 'name': 'og:description', 'content': defaultMetaDesc },
-    { 'name': 'og:image', 'content': ogimage }
+    { 'name': 'og:image', 'content': ogimage },
+    { 'name': 'og:image:url', 'content': ogimage },
+    { 'name': 'og:image:secure_url', 'content': ogimage }
 
   ]
 };
