@@ -15,6 +15,7 @@ import applecon from 'file!images/apple-touch-icon.png';
 import mscon from 'file!images/mstile-150x150.png';
 import favicon from 'file!images/favicon.ico';
 import ogimage from 'file!images/react-draughts.png';
+import ogimage2 from 'images/react-draughts.png';
 
 const defaultMetaDesc = 'Draughts in React and Redux';
 
@@ -53,7 +54,7 @@ const config = {
     { 'name': 'og:title', 'content': 'React Draughts' },
     { 'name': 'og:description', 'content': defaultMetaDesc },
     { 'name': 'og:type', 'content': 'game' },
-    { 'name': 'og:image', 'content': 'https://react-draughts.herokuapp.com' + ogimage } // TODO - yuck, fix this hardcoded path
+    { 'name': 'og:image', 'content': 'https://react-draughts.herokuapp.com' + ogimage2 } // TODO - yuck, fix this hardcoded path
   ]
 };
 
