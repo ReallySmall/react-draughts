@@ -18,6 +18,7 @@ class PieceContainer extends Component {
       const thisPiece = pieces[cellRef];
 
       let markup = null;
+      
 
       if(thisPiece){
 

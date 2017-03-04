@@ -18,7 +18,7 @@ const history = syncHistoryWithStore(browserHistory, store)
 // Read more https://github.com/rackt/react-router/blob/latest/docs/Glossary.md#routeconfig
 render(
   <Provider store={store}>
-    <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
+    <Router history={history}>
       {routes}
     </Router>
   </Provider>, document.getElementById('app'));

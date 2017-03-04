@@ -1,9 +1,10 @@
 var express = require('express');
-var compression = require('compression');
 var fs = require('fs');
 var mongoose = require('mongoose');
 var webpack = require('webpack');
 var dotenv = require('dotenv').config();
+var webpackDevMiddleware = require('webpack-dev-middleware');
+var webpackHotMiddleware = require('webpack-hot-middleware');
 
 // keystone integration
 var keystone = require('keystone');
@@ -17,11 +18,22 @@ var flash = require('connect-flash');
 
 var app = express();
 
-if (process.env.NODE_ENV !== 'development') {
-  //app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// If in dev enable HMR
+if (process.env.NODE_ENV === 'development') {
+  
+  var config = require('../webpack/webpack.config.dev-client.js');
+  var compiler = webpack(config);
+  
+  app.use(webpackDevMiddleware(compiler, {
+    noInfo: true,
+    publicPath: '/assets/',
+    stats: { colors: true }
+  }));
+
+  app.use(webpackHotMiddleware(compiler));
+
 }
 
-app.use(compression());
 keystone.static(app);
 
 app.use(cookieParser(process.env.KEYSTONE_COOKIE_SECRET));
@@ -69,17 +81,6 @@ keystone.mongoose.connection.on('error', console.log);
 
 // Serve your static assets
 app.use(serve('./public'));
-
-// If in dev enable HMR
-if (process.env.NODE_ENV === 'development') {
-  var config = require('../webpack/webpack.config.dev-client.js');
-  var compiler = webpack(config);
-  app.use(require('webpack-dev-middleware')(compiler, {
-    noInfo: true,
-    publicPath: config.output.publicPath
-  }));
-  app.use(require('webpack-hot-middleware')(compiler));
-}
 
 // Bootstrap routes
 require('./routes')(app);

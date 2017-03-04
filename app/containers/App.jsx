@@ -9,15 +9,9 @@ import classNames from 'classnames/bind';
 import 'css/main';
 import styles from 'css/main';
 
-import { fetchWrapper } from 'actions/wrapper';
-
 const cx = classNames.bind(styles);
 
 const App = ({children, location}) => {
-
-  //Data that needs to be called before rendering the component
-  //This is used for server side rending via the fetchComponentDataBeforeRending() method
-  const need = [ fetchWrapper ];
 
   return (
     <div>

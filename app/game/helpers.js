@@ -37,11 +37,19 @@ const invertPlayDirection = (activePiece, opponentPiece) => {
 // is a potential capture landing square in the movemnt plane of the active piece (pieces can only capture in straight lines)
 const inMovementPlane = (activeCellRef, opponentCellRef, landingCellRef) => {
 
+	const activeCellRowIndex = gridRefStringToNumericalArray(activeCellRef)[0];
+	const opponentCellRowIndex = gridRefStringToNumericalArray(opponentCellRef)[0];
+	const landingCellRowIndex = gridRefStringToNumericalArray(landingCellRef)[0];
 	const activeCellColIndex = gridRefStringToNumericalArray(activeCellRef)[1];
 	const opponentCellColIndex = gridRefStringToNumericalArray(opponentCellRef)[1];
 	const landingCellColIndex = gridRefStringToNumericalArray(landingCellRef)[1];
 
-	if((opponentCellColIndex > activeCellColIndex && landingCellColIndex > opponentCellColIndex) || (opponentCellColIndex < activeCellColIndex && landingCellColIndex < opponentCellColIndex)){
+	if(landingCellRowIndex === activeCellRowIndex){
+		return false;
+	}
+
+	if((opponentCellColIndex > activeCellColIndex && landingCellColIndex > opponentCellColIndex) 
+		|| (opponentCellColIndex < activeCellColIndex && landingCellColIndex < opponentCellColIndex)){
 		return true;
 	}
 

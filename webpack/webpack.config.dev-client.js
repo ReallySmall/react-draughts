@@ -91,12 +91,6 @@ module.exports = {
       // The output path from the view of the Javascript
       publicPath: '/assets/'
     },
-    externals: {
-      // require("jquery") is external and available
-      //  on the global var jQuery
-      "jquery": "jQuery",
-      "$": "jQuery"
-    },
     module: {
       loaders: commonLoaders.concat([
         { test: /\.css$/,
@@ -116,10 +110,6 @@ module.exports = {
         new webpack.DefinePlugin({
           __DEVCLIENT__: true,
           __DEVSERVER__: false
-        }),
-        new webpack.ProvidePlugin({ 
-          $: 'jquery', 
-          jQuery: 'jquery'
         })
     ],
     postcss: postCSSConfig

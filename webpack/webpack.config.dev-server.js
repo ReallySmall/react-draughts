@@ -81,7 +81,7 @@ module.exports = {
     // Multiple entry with hot loader
     // https://github.com/glenjamin/webpack-hot-middleware/blob/master/example/webpack.config.multientry.js
     entry: {
-      app: ['./client', hotMiddlewareScript]
+      app: [hotMiddlewareScript, './client']
     },
     output: {
       // The output directory as absolute path
@@ -90,12 +90,6 @@ module.exports = {
       filename: '[name].js',
       // The output path from the view of the Javascript
       publicPath: '/assets/'
-    },
-    externals: {
-      // require("jquery") is external and available
-      //  on the global var jQuery
-      "jquery": "jQuery",
-      "$": "jQuery"
     },
     module: {
       loaders: commonLoaders.concat([
@@ -116,10 +110,6 @@ module.exports = {
         new webpack.DefinePlugin({
           __DEVCLIENT__: true,
           __DEVSERVER__: false
-        }),
-        new webpack.ProvidePlugin({ 
-          $: 'jquery', 
-          jQuery: 'jquery'
         })
     ],
     postcss: postCSSConfig

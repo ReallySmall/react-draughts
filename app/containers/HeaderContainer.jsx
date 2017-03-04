@@ -21,7 +21,6 @@ HeaderContainer.propTypes = {};
 
 function mapStateToProps(state) {
   return {
-    content: state.wrapper.content,
     route: state.routing
   };
 }
