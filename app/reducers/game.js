@@ -135,10 +135,21 @@ export default function game(state = {
 
         if(move.over){ // if there are no subsequent mandatory captures for the piece to make
 
-          gameMessages.yourMove(playerData, opponent); // opposing player it's now your turn
+          if(gamePieces.setActivePieces(opponent).activeCount === 0){ // if the next player has no available moves, they lose
 
-          if(gamePieces.setActivePieces(opponent).captures){
-            gameMessages.mustCapture(playerData, opponent); // there's at least one cpture move you must make
+            gameMessages.victory(playerData, state.activePlayer, state.moves);
+            gamePieces.unselectAllPieces(); // remove selections
+            gamePieces.setActivePieces(-1); // and make all remaining pieces inactive
+            finished = true; // this flag renders the 'play again?' button
+            
+          } else {
+
+            gameMessages.yourMove(playerData, opponent); // opposing player it's now your turn
+
+            if(gamePieces.setActivePieces(opponent).captures){
+              gameMessages.mustCapture(playerData, opponent); // there's at least one capture move you must make
+            }
+
           }
 
         } else { // if the current player's move isn't over because there's a further possible capture move

@@ -55,6 +55,7 @@ const selectPiece = (pieces, activePieceCellRef, gridSize) => {
 const setActivePieces = (pieces, activePlayer, gridSize) => {
 
 	let canCapture = false;
+	let activeCount = 0;
 
 	each(pieces, (piece) => {  
     	
@@ -88,6 +89,10 @@ const setActivePieces = (pieces, activePlayer, gridSize) => {
 				piece.active = false;
 			}
 
+			if(piece.active === true){
+				activeCount++;
+			}
+
 			return piece;
 
 		}
@@ -96,7 +101,8 @@ const setActivePieces = (pieces, activePlayer, gridSize) => {
 
 	return {
 		captures: canCapture,
-		pieces: updatedPieces
+		pieces: updatedPieces,
+		activeCount: activeCount
 	};
 
 };
