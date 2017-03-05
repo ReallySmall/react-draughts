@@ -26,6 +26,7 @@ export default class GameSettings extends Component {
                     	<option value="0">Standard</option>
                     	<option value="1">Sparse</option>
                     	<option value="2">Crowded</option>
+                        <option value="3">Small</option>
                     </select>
                 </div>
                 <button onClick={

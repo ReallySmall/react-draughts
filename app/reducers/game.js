@@ -108,19 +108,13 @@ export default function game(state = {
 
       if(move.captures){ // if the move captured a piece
 
-        playerData[opponent].pieces = playerData[opponent].pieces - 1;
         gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, true);
-      
-      } else { // if the move didn't capture a piece
-        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, false);
-      }
+        playerData[opponent].pieces = playerData[opponent].pieces - 1;
 
-      if(move.coronated){ // if piece landed on opposing end of the board, it becomes a king
-        gameMessages.coronated(playerData, state.activePlayer);
-        move.over = true; // the turn always finishes when a piece becomes a king, even if further captures are possible
-      }
-
-      if(move.over){ // if there are no subsequent mandatory captures for the piece to make
+        if(move.coronated){ // if piece landed on opposing end of the board, it becomes a king
+          gameMessages.coronated(playerData, state.activePlayer);
+          move.over = true; // the turn always finishes when a piece becomes a king, even if further captures are possible
+        }
 
         if(playerData[0].pieces === 0 || playerData[1].pieces === 0){ // the game is over if either player has run out of pieces
 
@@ -131,7 +125,15 @@ export default function game(state = {
           gamePieces.setActivePieces(-1); // and make all remaining pieces inactive
           finished = true; // this flag renders the 'play again?' button
 
-        } else {
+        }
+      
+      } else { // if the move didn't capture a piece
+        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, false);
+      }
+
+      if(!finished){
+
+        if(move.over){ // if there are no subsequent mandatory captures for the piece to make
 
           gameMessages.yourMove(playerData, opponent); // opposing player it's now your turn
 
@@ -139,11 +141,11 @@ export default function game(state = {
             gameMessages.mustCapture(playerData, opponent); // there's at least one cpture move you must make
           }
 
+        } else { // if the current player's move isn't over because there's a further possible capture move
+          nextPlayer = state.activePlayer; // next player is the same player
+          gameMessages.mustMove(playerData, state.activePlayer); // you must capture another piece      
         }
 
-      } else { // if the current player's move isn't over because there's a further possible capture move
-        nextPlayer = state.activePlayer; // next player is the same player
-        gameMessages.mustMove(playerData, state.activePlayer); // you must capture another piece      
       }
 
       return Object.assign({}, state, {
