@@ -5,7 +5,7 @@ import * as types from 'constants/index';
 
 polyfill();
 
-// Clear any current piece selections
+// Create a new piece collection
 export function createPieceCollection() {
 
 	return {

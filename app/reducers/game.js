@@ -100,61 +100,62 @@ export default function game(state = {
 
       const move = gamePieces.moveActivePiece(action.cellRef); // move the piece
 
-      let playerData = state.players;
-      let pieceMoveMessage;
-      let opponent = state.activePlayer === 0 ? 1 : 0;
-      let nextPlayer = opponent;
-      let finished = state.finished;
+      let playerData = state.players; // local copy of player data to modify
+      let opponent = state.activePlayer === 0 ? 1 : 0; // the opponent of the active player
+      let nextPlayer = opponent; // the next player, unless modified later if a subsequent move is required
+      let finished = state.finished; // is the game finished yet? (it shouldn't be possible to be true at this point)
 
       if(move.captures){ // if the move captured a piece
 
-        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, true);
-        playerData[opponent].pieces = playerData[opponent].pieces - 1;
+        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, true); // add message to history
+        playerData[opponent].pieces = playerData[opponent].pieces - 1; // deduct a piece from opponent
 
         if(move.coronated){ // if piece landed on opposing end of the board, it becomes a king
-          gameMessages.coronated(playerData, state.activePlayer);
+          gameMessages.coronated(playerData, state.activePlayer); // add message to history
           move.over = true; // the turn always finishes when a piece becomes a king, even if further captures are possible
         }
 
         if(playerData[0].pieces === 0 || playerData[1].pieces === 0){ // the game is over if either player has run out of pieces
 
-          const winner = playerData[0].pieces > playerData[1].pieces ? 0 : 1; // the winner has at least on piece left
+          const winner = playerData[0].pieces > playerData[1].pieces ? 0 : 1; // the winner has at least one piece left
           
-          gameMessages.victory(playerData, winner, state.moves);
-          gamePieces.unselectAllPieces(); // remove slections
+          gameMessages.victory(playerData, winner, state.moves); // add message to history
+          gamePieces.unselectAllPieces(); // remove selections
           gamePieces.setActivePieces(-1); // and make all remaining pieces inactive
           finished = true; // this flag renders the 'play again?' button
 
         }
       
       } else { // if the move didn't capture a piece
-        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, false);
+        gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, false); // add message to history
       }
 
-      if(!finished){
+      if(!finished){ // if the game hasn't finished
 
-        if(move.over){ // if there are no subsequent mandatory captures for the piece to make
+        if(!move.over){ // if the current player's move isn't over because there's a further possible capture move
 
-          if(gamePieces.setActivePieces(opponent).activeCount === 0){ // if the next player has no available moves, they lose
+          nextPlayer = state.activePlayer; // next player is the same player
+          gameMessages.mustMove(playerData, state.activePlayer); // you must capture another piece 
 
-            gameMessages.victory(playerData, state.activePlayer, state.moves);
+        } else { // if there are no subsequent mandatory captures for the piece to make
+               
+          if(gamePieces.setActivePieces(opponent).activeCount === 0){ // if the next player has no available moves, they automatically lose
+
+            gameMessages.victory(playerData, state.activePlayer, state.moves); // add message to history
             gamePieces.unselectAllPieces(); // remove selections
             gamePieces.setActivePieces(-1); // and make all remaining pieces inactive
-            finished = true; // this flag renders the 'play again?' button
-            
+            finished = true; // the game is finished - this flag renders the 'play again?' button
+
           } else {
 
             gameMessages.yourMove(playerData, opponent); // opposing player it's now your turn
 
-            if(gamePieces.setActivePieces(opponent).captures){
-              gameMessages.mustCapture(playerData, opponent); // there's at least one capture move you must make
+            if(gamePieces.setActivePieces(opponent).captures){ // there's at least one capture move the player must make
+              gameMessages.mustCapture(playerData, opponent); // add message to history
             }
 
           }
 
-        } else { // if the current player's move isn't over because there's a further possible capture move
-          nextPlayer = state.activePlayer; // next player is the same player
-          gameMessages.mustMove(playerData, state.activePlayer); // you must capture another piece      
         }
 
       }

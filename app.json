@@ -2,5 +2,5 @@
   "name": "React Drafts",
   "description": "Everybody's favourite game drafts in ReactJS and Flux, using Webpack as a module bundler",
   "repository": "https://github.com/ReallySmall/react-drafts",
-  "keywords": ["node", "express", "static", "react", "webpack", "mongodb", "isomorphic", "stackduino"],
+  "keywords": ["node", "express", "static", "react", "webpack", "mongodb", "isomorphic", "draughts", "checkers"],
 }
