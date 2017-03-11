@@ -28,10 +28,9 @@ export function setGameType(typeId) {
   }
 }
 
-export function startGame(settings) {
+export function startGame() {
   return {
-    type: types.START_GAME,
-    settings: settings
+    type: types.START_GAME
   }
 }
 

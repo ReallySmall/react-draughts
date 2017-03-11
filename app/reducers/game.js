@@ -18,8 +18,7 @@ const defaultStartingPieceCount = 12;
 const gamePieces = new Pieces(defaultGridSize);
 const gameMessages = new GameHistory();
 
-export default function game(state = {
-
+const initialState = {
   grid: createGrid(defaultGridSize),
   gridSize: defaultGridSize,
   startingPieceCount: defaultStartingPieceCount,
@@ -33,8 +32,9 @@ export default function game(state = {
   history: [],
   moves: 0,
   pieces: gamePieces.createPieces(defaultGridSize, defaultStartingPieceCount)
+};
 
-}, action) {
+export default function game(state = initialState, action) {
 
   switch (action.type) {
 
@@ -174,3 +174,5 @@ export default function game(state = {
 
   }
 }
+
+export { initialState as initialState };

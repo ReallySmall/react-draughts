@@ -16,14 +16,23 @@
     "build:prod": "cross-env NODE_ENV=production webpack --profile --json > stats.json --colors --config ./webpack/webpack.config.prod.js",
     "build:node": "cross-env NODE_ENV=production npm run babel -- ./server -d ./compiled",
     "build": "npm run clean && npm run build:prod && npm run build:node",
-    "test": "cross-env NODE_ENV=test karma start",
-    "test:watch": "cross-env NODE_ENV=test npm test -- --watch --no-single-run",
+    "test": "cross-env NODE_ENV=test jest",
     "postinstall": "npm run build"
   },
   "author": "Richard Iles",
   "license": "MIT",
   "devDependencies": {
+    "babel-jest": "^19.0.0",
+    "jest": "^19.0.2",
     "webpack": "^1.13.3"
+  },
+  "jest": {
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js|jsx)$",
+    "moduleDirectories": ["node_modules", "app"],
+    "moduleFileExtensions": [
+      "jsx",
+      "js"
+    ]
   },
   "engines": {
     "node": "4.3.1"

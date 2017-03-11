@@ -35,7 +35,6 @@ class Pieces {
 		this.moveActivePiece = (landingPieceCellRef) => { 
 			const move = moveActivePiece(this.pieces, landingPieceCellRef, this.gridSize);
 			this.pieces = move.pieces;
-			console.log(move);
 			return move;
 		};
 
