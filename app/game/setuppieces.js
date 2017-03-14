@@ -95,7 +95,8 @@ const createPieces = (gridSize, piecesPerPlayer) => {
 	        	if(inGame && playerTwoPiecesDeployed < piecesPerPlayer){
 
 			        let piece = { 
-			        	cellRef: cellRef, 
+			        	cellRef: cellRef,
+			        	gridSize: gridSize,
 			        	player: 1,
 			        	colour: 'player2', 
 			        	type: 'pawn', 

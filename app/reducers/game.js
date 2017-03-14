@@ -127,7 +127,13 @@ export default function game(state = initialState, action) {
         }
       
       } else { // if the move didn't capture a piece
+
+        if(move.coronated){ // if piece landed on opposing end of the board, it becomes a king
+          gameMessages.coronated(playerData, state.activePlayer); // add message to history
+        }
+
         gameMessages.movedTo(playerData, state.activePlayer, action.cellRef, false); // add message to history
+
       }
 
       if(!finished){ // if the game hasn't finished

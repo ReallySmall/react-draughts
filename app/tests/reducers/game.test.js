@@ -76,15 +76,43 @@ describe('Game reducer', () => {
 
   });
 
-  // it('Should create a piece collection object', () => {
-    
-  //   expect(
-  //     game(undefined, {
-  //       type: types.CREATE_PIECE_COLLECTION
-  //     })
-  //   ).pieces.toMatchObject(gameStartSubset);
+  it('Should create a valid piece collection object', () => {
 
-  // });
+    const pieces = game(undefined, {
+      type: types.CREATE_PIECE_COLLECTION
+    }).pieces;
+
+    for (var piece in pieces) {
+
+      const pieceObj = pieces[piece];
+      const { cellRef, gridSize, player, colour } = pieceObj
+
+      expect(pieceObj).toHaveProperty('cellRef');
+      expect(typeof cellRef).toBe('string');
+      expect(cellRef).toHaveLength(3);
+      expect(typeof parseInt(cellRef[0]), 10).toBe('number');
+      expect(cellRef[1]).toBe('_');
+      expect(typeof parseInt(cellRef[2]), 10).toBe('number');
+
+      expect(pieceObj).toHaveProperty('gridSize');
+      expect(typeof gridSize).toBe('number');
+
+      expect(pieceObj).toHaveProperty('player');
+      expect(typeof player).toBe('number');
+      expect(player).toBeGreaterThan(-1);
+      expect(player).toBeLessThan(2);
+
+      expect(pieceObj).toHaveProperty('colour');
+      expect(['player1', 'player2']).toContain(colour);
+
+      expect(pieceObj).toHaveProperty('type', 'pawn');
+      expect(pieceObj).toHaveProperty('active', false);
+      expect(pieceObj).toHaveProperty('selected', false);
+      expect(pieceObj).toHaveProperty('captures', []);
+
+    };
+
+  });
 
   it('Should set the correct piece\'s selected property to true', () => {
     
@@ -108,6 +136,24 @@ describe('Game reducer', () => {
     for (var piece in pieces) {
       expect(pieces[piece]).toHaveProperty('selected', false);
     };
+
+  });
+
+  it('Should correctly update the game state on moving a piece', () => { // currently hard to fully test what happens here - the reducer function needs refactoring 
+    
+    const newState = game(undefined, {
+      type: types.MOVE_ACTIVE_PIECE,
+      cellRef: '0_0'
+    });
+
+    const { activePlayer, players, history, moves } = newState;
+
+    expect(players).toHaveLength(2);
+    expect(history).not.toHaveLength(0);
+    expect(moves).toBeGreaterThan(0);
+    expect(typeof activePlayer).toBe('number');
+    expect(activePlayer).toBeGreaterThan(-1);
+    expect(activePlayer).toBeLessThan(2);
 
   });
 
