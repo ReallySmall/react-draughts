@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import ReactDom from 'react-dom';
 import Square from 'components/Square';
 import PieceContainer from 'containers/PieceContainer';
 import classNames from 'classnames/bind';
@@ -8,10 +11,22 @@ import styles from 'css/components/_board';
 
 const cx = classNames.bind(styles);
 
-export default class Board extends Component {
+class Board extends Component {
 
   constructor(props) {
     super(props);
+    this.state = { pieceWidth: 0 };
+  };
+
+  componentDidMount(){
+
+    const domNode = ReactDom.findDOMNode(this.refs.piece);
+    const domNodeWidth = domNode.getBoundingClientRect().width;
+
+    this.setState({
+      pieceWidth: parseInt(domNodeWidth * 0.8, 10)
+    });
+
   };
 
   render() {
@@ -31,7 +46,7 @@ export default class Board extends Component {
         board.push(
 
           <Square key={i + '-' + j} gridSize={gridSize} inGame={inGame} style={style}>
-            <PieceContainer cellRef={cellRef} activePlayer={activePlayer} pieces={pieces} />
+            <PieceContainer ref="piece" cellRef={cellRef} activePlayer={activePlayer} pieces={pieces} pieceWidth={this.state.pieceWidth} />
           </Square>
 
         );
@@ -41,7 +56,7 @@ export default class Board extends Component {
 
 
     return (
-      <div className={cx('col-lg-9', 'board-wrapper')}>
+      <div className={cx('col-lg-9', 'board-wrapper')} ref="board">
           <section>
             <div className={cx('board')}>
               {board}
@@ -55,3 +70,5 @@ export default class Board extends Component {
 
 Board.propTypes = {
 };
+
+export default DragDropContext(HTML5Backend)(Board);

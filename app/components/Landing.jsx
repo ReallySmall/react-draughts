@@ -7,12 +7,23 @@ const cx = classNames.bind(styles);
 
 export default class Landing extends Component {
 
+  componentWillUpdate(props){
+
+    const { didDrop, cellRef, dragResult, moveActivePieceToHere } = props;
+
+    if(props.didDrop && dragResult.droppedOnCellRef === cellRef){
+      moveActivePieceToHere(cellRef);
+    }
+
+  };
+
   render(){
 
-    const { cellRef, moveActivePieceToHere } = this.props;
+    const { cellRef, moveActivePieceToHere, connectDropTarget, isOver, didDrop } = this.props;
+    const dragOver = isOver ? 'drag-over' : '';
 
-    return (
-      <button className={cx('piece','landing', 'plain')}
+    return connectDropTarget(
+      <button className={cx('piece','landing', 'plain', dragOver)}
   	    onClick={
           (event) => {
             event.preventDefault();
@@ -25,4 +36,4 @@ export default class Landing extends Component {
 
   }
 
-}
+};

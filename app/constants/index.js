@@ -19,3 +19,4 @@ export const END_GAME = 'END_GAME';
 export const UPDATE_GAME_HISTORY = 'SET_PIECE_SELECTION';
 export const UPDATE_PIECES = 'UPDATE_PIECES';
 export const MOVE_ACTIVE_PIECE = 'MOVE_ACTIVE_PIECE';
+export const ACTIVE_PIECE = 'ACTIVE_PIECE';

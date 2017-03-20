@@ -61,6 +61,11 @@
 		}
 	}
 	&.landing {
+		width: 86%;
+		top: 7%;
+		right: 7%;
+		bottom: 7%;
+		left: 7%;
 		background: none;
 		border: 2px dashed $white;
 		opacity: 0.6;
@@ -78,7 +83,7 @@
 			border: none;
 			opacity: 0.5;
 		}
-		&:hover, &:focus {
+		&.drag-over, &:hover, &:focus {
 			opacity: 1;
 			cursor: pointer;
 			box-shadow: none;
