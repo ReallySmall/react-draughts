@@ -20,7 +20,7 @@ import ogimage2 from 'images/react-draughts.png';
 const defaultMetaDesc = 'Draughts in React and Redux';
 
 const config = {
-  titleTemplate: 'React Draughts',
+  title: 'React Draughts',
   link: [
     // Add to homescreen for Chrome on Android
     { 'rel': 'icon', 'href': favicon },

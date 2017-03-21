@@ -45,6 +45,7 @@ class Board extends Component {
     return (
       <div className={cx('col-lg-9', 'board-wrapper')} ref="board">
           <section>
+            <h2 className={cx('visually-hidden')}>Board</h2>
             <div className={cx('board')}>
               {board}
             </div>

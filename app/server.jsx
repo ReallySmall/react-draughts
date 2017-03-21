@@ -30,7 +30,7 @@ function renderFullPage(renderedContent, initialState) {
   <!doctype html>
     <html lang="en">
     <head>
-      ${head.title.toString()}
+      <title>React/ Redux Draughts</title>
       ${head.meta.toString()}
       ${head.link.toString()}
       <noscript>
