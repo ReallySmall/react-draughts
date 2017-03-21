@@ -10,23 +10,24 @@ export default class ActivePiece extends Component {
 
   componentDidMount(){
 
-    const { connectDragPreview, pieceWidth } = this.props;
+    const { connectDragPreview, pieceWidth, colour } = this.props;
     const canvas = document.createElement('canvas');
-    
-    canvas.width = pieceWidth + 10;
-    canvas.height = pieceWidth + 10;
+
+    canvas.width = pieceWidth * 0.9;
+    canvas.height = pieceWidth * 0.9;
     
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const radius = (canvas.width / 2) - 4;
+    const radius = (canvas.width / 2) - 2;
+    const dragColour = colour === 'player1' ? '#901a1a' : 'whitesmoke'
 
     let context = canvas.getContext('2d');
 
     context.beginPath();
     context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-    context.fillStyle = 'yellow';
+    context.fillStyle = dragColour;
     context.fill();
-    context.lineWidth = 2;
+    context.lineWidth = 1;
     context.strokeStyle = 'black';
     context.stroke();
 

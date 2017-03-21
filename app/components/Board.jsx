@@ -3,7 +3,6 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import ReactDom from 'react-dom';
 import Square from 'components/Square';
 import PieceContainer from 'containers/PieceContainer';
 import classNames from 'classnames/bind';
@@ -15,18 +14,6 @@ class Board extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { pieceWidth: 0 };
-  };
-
-  componentDidMount(){
-
-    const domNode = ReactDom.findDOMNode(this.refs.piece);
-    const domNodeWidth = domNode.getBoundingClientRect().width;
-
-    this.setState({
-      pieceWidth: parseInt(domNodeWidth * 0.8, 10)
-    });
-
   };
 
   render() {
@@ -46,7 +33,7 @@ class Board extends Component {
         board.push(
 
           <Square key={i + '-' + j} gridSize={gridSize} inGame={inGame} style={style}>
-            <PieceContainer ref="piece" cellRef={cellRef} activePlayer={activePlayer} pieces={pieces} pieceWidth={this.state.pieceWidth} />
+            <PieceContainer ref="piece" cellRef={cellRef} activePlayer={activePlayer} pieces={pieces} />
           </Square>
 
         );

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Dimensions from 'react-dimensions'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { clearPieceSelections, moveActivePieceToHere, setPieceSelection } from 'actions/pieces';
@@ -65,7 +66,7 @@ class PieceContainer extends Component {
 
   	render() {
 
-      const { activePlayer, pieces, cellRef, clearPieceSelections, moveActivePieceToHere, setPieceSelection, connectDragSource, draggedItem, connectDragPreview, dragResult, isDragging, isOver, didDrop, connectDropTarget, pieceWidth } = this.props;
+      const { activePlayer, pieces, cellRef, containerWidth, clearPieceSelections, moveActivePieceToHere, setPieceSelection, connectDragSource, draggedItem, connectDragPreview, dragResult, isDragging, isOver, didDrop, connectDropTarget, pieceWidth } = this.props;
       const thisPiece = pieces[cellRef];
 
       let markup = null;
@@ -73,7 +74,7 @@ class PieceContainer extends Component {
       if(thisPiece){
 
         const isLanding = thisPiece.type === 'landing' ? true : false;
-        const isActive = thisPiece.active;;
+        const isActive = thisPiece.active;
 
         if(isActive && !isLanding){
 
@@ -84,7 +85,8 @@ class PieceContainer extends Component {
                       connectDragPreview={connectDragPreview}
                       draggedItem={draggedItem}
                       isDragging={isDragging}
-                      pieceWidth={pieceWidth} />
+                      isOver={isOver}
+                      pieceWidth={containerWidth}/>
 
         } else if(!isActive && !isLanding){
 
@@ -125,6 +127,7 @@ function mapDispatchToProps(dispatch) {
 };
 
 export default compose(
+  Dimensions(),
   DragSource(types.ACTIVE_PIECE, dragDropSource, dragDropSourceCollect),
   DropTarget(types.ACTIVE_PIECE, dragDropTarget, dragDropTargetCollect),
   connect(null, mapDispatchToProps)

@@ -20,9 +20,8 @@ export default class Header extends Component {
     return (
       <div className={cx('container', 'header-container')}>
         <div className={cx('col-md-12')}>
-          <h1>React Draughts</h1>
-          <p>React + Redux</p>
-          <p><a href="https://github.com/ReallySmall/react-draughts">github.com/ReallySmall/react-draughts</a></p>
+          <h1>React/ Redux Draughts</h1>
+          <p>Because who needs Call of Duty, when you've got Draughts | <a href="https://github.com/ReallySmall/react-draughts">github.com/ReallySmall/react-draughts</a></p>
         </div>
       </div>
     );
